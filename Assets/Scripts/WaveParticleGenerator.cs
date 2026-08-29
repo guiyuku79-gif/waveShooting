@@ -8,7 +8,9 @@ public class WaveParticleGenerator : MonoBehaviour
         for (int i = 0; i < LineSample.Instance.division; i++)
         {
             GameObject gameobject = Instantiate(ParticlePrefab);
-            gameobject.GetComponent<WaveParticleController>().Init(i);
+            gameobject.GetComponent<WaveParticleController>().Init(i, "player");
+            GameObject gameobject2 = Instantiate(ParticlePrefab);
+            gameobject2.GetComponent<WaveParticleController>().Init(i, "enemy");
 
         }
     }

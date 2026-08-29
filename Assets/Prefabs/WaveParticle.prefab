@@ -106,4 +106,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveParticleController
   particleInterval: 0.1
-  renderer: {fileID: 2415332791531548157}
+  spriteRenderer: {fileID: 2415332791531548157}
