@@ -5,6 +5,7 @@ using System.Linq;
 
 public class LineSample : MonoBehaviour
 {
+    [SerializeField] GameObject Player;
     public LineRenderer line;
 
     public int pointCount = 200;
@@ -106,15 +107,9 @@ public class LineSample : MonoBehaviour
 
         if (Mouse.current.leftButton.isPressed)
         {
-            Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
-
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(
-                new Vector3(mouseScreenPos.x, mouseScreenPos.y, 10f)
-            );
-
 
             PlayerWaveIds[0] = playerWaveId;
-            PlayerWavePowers[0] = mouseWorldPos.y;
+            PlayerWavePowers[0] = Player.transform.position.y;
             EnemyWavePowers[division - 1] = 0f;
             EnemyWaveIds[division - 1] = 0;
 
