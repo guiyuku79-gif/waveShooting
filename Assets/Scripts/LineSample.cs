@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class LineSample : MonoBehaviour
 {
@@ -78,6 +79,10 @@ public class LineSample : MonoBehaviour
         if (Keyboard.current.aKey.wasPressedThisFrame)
         {
             MakeSinWave();
+        }
+        if (Keyboard.current.sKey.wasPressedThisFrame)
+        {
+            WavePowerCheck();
         }
     }
 
@@ -181,7 +186,26 @@ public class LineSample : MonoBehaviour
     {
         for (int i = 0; i < 30; i++)
         {
-            NextEnemyWaveList.Add(Mathf.Sin(Mathf.PI * i / 15));
+            NextEnemyWaveList.Add(Mathf.Sin(Mathf.PI * i / 15) * 2);
+        }
+    }
+
+    private void WavePowerCheck()
+    {
+        List<int> playerIds = PlayerWaveIds.Distinct().ToList();
+        playerIds.Remove(0);
+        foreach (int Ids in playerIds)
+        {
+            float originalPowerSum = 0;
+            float changedPowerSum = 0;
+            for (int i = 0; i < division; i++)
+            {
+                if (PlayerWaveIds[i] != Ids) continue;
+
+                originalPowerSum += Mathf.Abs(PlayerWavePowers[i]);
+                changedPowerSum += Mathf.Abs(PlayerWavePowers[i] + EnemyWavePowers[i]);
+            }
+            Debug.Log($"{Ids}の倍率{changedPowerSum / originalPowerSum}");
         }
     }
 }
