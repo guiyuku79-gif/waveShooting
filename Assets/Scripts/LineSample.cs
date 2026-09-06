@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System.Linq;
+using System;
 
 public class LineSample : MonoBehaviour
 {
@@ -14,15 +15,9 @@ public class LineSample : MonoBehaviour
     private float deltaTimeCount;
     [SerializeField] public int division = 100;//100個の点で表現
 
-    public List<float> PlayerWavePowers = new List<float>();
-    public List<int> PlayerWaveIds = new List<int>();
+    [NonSerialized] public Medium PlayerMedium;
+    [NonSerialized] public Medium EnemyMedium;
 
-    public List<float> EnemyWavePowers = new List<float>();
-    public List<int> EnemyWaveIds = new List<int>();
-
-    //次に出す波のIDを決める
-    private int playerWaveId;
-    private int enemyWaveId;
 
     private List<float> NextEnemyWaveList = new List<float>();
 
@@ -41,19 +36,11 @@ public class LineSample : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < division; i++)
-        {
-            PlayerWavePowers.Add(0f);
-            PlayerWaveIds.Add(0);
+        PlayerMedium = new Medium(division);
+        EnemyMedium = new Medium(division);
 
-            EnemyWavePowers.Add(0f);
-            EnemyWaveIds.Add(0);
-        }
 
         deltaTimeCount = 0f;
-
-        playerWaveId = 1;
-        enemyWaveId = 1;
 
         //仮
         for (int i = 0; i < 20; i++)
@@ -86,48 +73,22 @@ public class LineSample : MonoBehaviour
     private void MoveWave()
     {
 
-        //波を動かす
-        for (int i = division - 1; i > 0; i--)
-        {
-            PlayerWavePowers[i] = PlayerWavePowers[i - 1];
-            PlayerWaveIds[i] = PlayerWaveIds[i - 1];
-        }
-
-        for (int i = 0; i < division - 1; i++)
-        {
-            EnemyWavePowers[i] = EnemyWavePowers[i + 1];
-            EnemyWaveIds[i] = EnemyWaveIds[i + 1];
-        }
-
-
-
-
-
         if (Mouse.current.leftButton.isPressed)
         {
-
-            PlayerWaveIds[0] = playerWaveId;
-            PlayerWavePowers[0] = Player.transform.position.y;
-            EnemyWavePowers[division - 1] = 0f;
-            EnemyWaveIds[division - 1] = 0;
-
+            PlayerMedium.RightWaveMove(Player.transform.position.y);
         }
         else
         {
-            PlayerWavePowers[0] = 0f;
-            PlayerWaveIds[0] = 0;
-
+            PlayerMedium.RightWaveMove(0);
         }
 
         if (NextEnemyWaveList.Count == 0)
         {
-            EnemyWavePowers[division - 1] = 0f;
-            EnemyWaveIds[division - 1] = 0;
+            EnemyMedium.LeftWaveMove(0);
         }
         else
         {
-            EnemyWavePowers[division - 1] = NextEnemyWaveList[0];
-            EnemyWaveIds[division - 1] = enemyWaveId;
+            EnemyMedium.LeftWaveMove(NextEnemyWaveList[0]);
             NextEnemyWaveList.RemoveAt(0);
         }
 
@@ -136,14 +97,14 @@ public class LineSample : MonoBehaviour
 
     private void WaveIDCheck()
     {
-        if (PlayerWaveIds[0] == 0 && PlayerWaveIds[1] != 0)
+        if (PlayerMedium.waveIds[0] == 0 && PlayerMedium.waveIds[1] != 0)
         {
-            playerWaveId++;
-            Debug.Log(playerWaveId);
+            PlayerMedium.nextWaveId++;
+            Debug.Log(PlayerMedium.nextWaveId);
         }
-        if (EnemyWaveIds[division - 1] == 0 && EnemyWaveIds[division - 2] != 0)
+        if (EnemyMedium.waveIds[division - 1] == 0 && EnemyMedium.waveIds[division - 2] != 0)
         {
-            enemyWaveId++;
+            EnemyMedium.nextWaveId++;
         }
     }
 
@@ -155,11 +116,11 @@ public class LineSample : MonoBehaviour
 
         for (int i = 0; i < division; i++)
         {
-            if (PlayerWaveIds[i] != 0 && EnemyWaveIds[i] != 0)
+            if (PlayerMedium.waveIds[i] != 0 && EnemyMedium.waveIds[i] != 0)
             {
                 onCount++;
             }
-            else if (PlayerWaveIds[i] != 0 || EnemyWaveIds[i] != 0)
+            else if (PlayerMedium.waveIds[i] != 0 || EnemyMedium.waveIds[i] != 0)
             {
                 offCount++;
             }
@@ -185,29 +146,8 @@ public class LineSample : MonoBehaviour
 
     private void WavePowerCheck()
     {
-        List<int> playerIdsSet = PlayerWaveIds.Distinct().ToList();
-        playerIdsSet.Remove(0);
-        foreach (int ids in playerIdsSet)
-        {
-            float originalPowerSum = 0;
-            float changedPowerSum = 0;
-            for (int i = 0; i < division; i++)
-            {
-                if (PlayerWaveIds[i] != ids) continue;
-
-                originalPowerSum += Mathf.Abs(PlayerWavePowers[i]);
-                changedPowerSum += Mathf.Abs(PlayerWavePowers[i] + EnemyWavePowers[i]);
-            }
-            //Debug.Log($"{Ids}の倍率{changedPowerSum / originalPowerSum}");
-            if(changedPowerSum/originalPowerSum < 0.3f)
-            {
-                DestoryWave(ids,PlayerWaveIds,PlayerWavePowers);
-            }
-        }
+        PlayerMedium.WavePowerCheck();
+        EnemyMedium.WavePowerCheck();
     }
 
-    private void DestoryWave(int id,List<int> ids,List<float> powers)
-    {
-        
-    }
 }

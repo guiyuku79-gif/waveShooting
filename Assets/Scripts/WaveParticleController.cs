@@ -7,6 +7,9 @@ public class WaveParticleController : MonoBehaviour
 
     private int id;
     private string charge;
+
+    private Medium playerMedium;
+    private Medium enemyMedium;
     public void Init(int id, string charge)
     {
         this.id = id;
@@ -19,6 +22,9 @@ public class WaveParticleController : MonoBehaviour
         {
             spriteRenderer.color = Color.yellow;
         }
+
+        playerMedium = LineSample.Instance.PlayerMedium;
+        enemyMedium = LineSample.Instance.EnemyMedium;
         transform.position = new Vector3((id - LineSample.Instance.division / 2) * particleInterval, 0, 0);
     }
 
@@ -26,7 +32,7 @@ public class WaveParticleController : MonoBehaviour
     {
         if (charge == "player")
         {
-            if (LineSample.Instance.PlayerWaveIds[id] == 0)
+            if (playerMedium.waveIds[id] == 0)
             {
                 spriteRenderer.enabled = false;
             }
@@ -34,13 +40,13 @@ public class WaveParticleController : MonoBehaviour
             {
                 spriteRenderer.enabled = true;
 
-                if (LineSample.Instance.EnemyWaveIds[id] == 0) transform.position = new Vector3(transform.position.x, LineSample.Instance.PlayerWavePowers[id], 0);
-                else transform.position = new Vector3(transform.position.x, LineSample.Instance.PlayerWavePowers[id] + LineSample.Instance.EnemyWavePowers[id], 0);
+                if (enemyMedium.waveIds[id] == 0) transform.position = new Vector3(transform.position.x, playerMedium.wavePowers[id], 0);
+                else transform.position = new Vector3(transform.position.x, playerMedium.wavePowers[id] + enemyMedium.wavePowers[id], 0);
             }
         }
         else
         {
-            if (LineSample.Instance.EnemyWaveIds[id] == 0)
+            if (enemyMedium.waveIds[id] == 0)
             {
                 spriteRenderer.enabled = false;
             }
@@ -48,8 +54,8 @@ public class WaveParticleController : MonoBehaviour
             {
                 spriteRenderer.enabled = true;
 
-                if (LineSample.Instance.EnemyWaveIds[id] == 0) transform.position = new Vector3(transform.position.x, LineSample.Instance.EnemyWavePowers[id], 0);
-                else transform.position = new Vector3(transform.position.x, LineSample.Instance.PlayerWavePowers[id] + LineSample.Instance.EnemyWavePowers[id], 0);
+                if (playerMedium.waveIds[id] == 0) transform.position = new Vector3(transform.position.x, enemyMedium.wavePowers[id], 0);
+                else transform.position = new Vector3(transform.position.x, playerMedium.wavePowers[id] + enemyMedium.wavePowers[id], 0);
             }
         }
 

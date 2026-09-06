@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
+using System;
+
 public class Medium
 {
     private int division;
@@ -7,9 +10,9 @@ public class Medium
 
     public int nextWaveId;
 
-    public Medium()
+    public Medium(int division)
     {
-        division = LineSample.Instance.division;
+        this.division = division;
         nextWaveId = 1;
 
         wavePowers = new List<float>();
@@ -30,7 +33,7 @@ public class Medium
             waveIds[i] = waveIds[i + 1];
         }
         wavePowers[division - 1] = wavePower;
-        waveIds[division - 1] = nextWaveId;
+        waveIds[division - 1] = wavePower == 0 ? 0 : nextWaveId;
     }
 
     public void RightWaveMove(float wavePower)
@@ -40,9 +43,28 @@ public class Medium
             wavePowers[i] = wavePowers[i - 1];
             waveIds[i] = waveIds[i - 1];
         }
-        waveIds[0] = nextWaveId;
+        waveIds[0] = wavePower == 0 ? 0 : nextWaveId;
         wavePowers[0] = wavePower;
     }
 
+    public void WavePowerCheck()
+    {
+        List<int> idsSet = waveIds.Distinct().ToList();
+        idsSet.Remove(0);
+        foreach (int ids in idsSet)
+        {
+            float originalPowerSum = 0;
+            float changedPowerSum = 0;
+            for (int i = 0; i < division; i++)
+            {
+                if (waveIds[i] != ids) continue;
 
+                originalPowerSum += Math.Abs(wavePowers[i]);
+                changedPowerSum += Math.Abs(wavePowers[i] + wavePowers[i]);
+            }
+            //Debug.Log($"{Ids}の倍率{changedPowerSum / originalPowerSum}");
+        }
+
+
+    }
 }
