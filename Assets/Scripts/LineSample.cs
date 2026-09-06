@@ -8,11 +8,6 @@ public class LineSample : MonoBehaviour
     [SerializeField] GameObject Player;
     public LineRenderer line;
 
-    public int pointCount = 200;
-    public float amplitude = 1f;
-    public float frequency = 2f;
-    public float width = 10f;
-
     [SerializeField] private float originalMoveInterval = 0.1f;
 
     private float moveInterval;
@@ -31,6 +26,7 @@ public class LineSample : MonoBehaviour
 
     private List<float> NextEnemyWaveList = new List<float>();
 
+    //シングルトン
     public static LineSample Instance { get; private set; }
 
     private void Awake()
@@ -89,6 +85,8 @@ public class LineSample : MonoBehaviour
 
     private void MoveWave()
     {
+
+        //波を動かす
         for (int i = division - 1; i > 0; i--)
         {
             PlayerWavePowers[i] = PlayerWavePowers[i - 1];
@@ -187,20 +185,29 @@ public class LineSample : MonoBehaviour
 
     private void WavePowerCheck()
     {
-        List<int> playerIds = PlayerWaveIds.Distinct().ToList();
-        playerIds.Remove(0);
-        foreach (int Ids in playerIds)
+        List<int> playerIdsSet = PlayerWaveIds.Distinct().ToList();
+        playerIdsSet.Remove(0);
+        foreach (int ids in playerIdsSet)
         {
             float originalPowerSum = 0;
             float changedPowerSum = 0;
             for (int i = 0; i < division; i++)
             {
-                if (PlayerWaveIds[i] != Ids) continue;
+                if (PlayerWaveIds[i] != ids) continue;
 
                 originalPowerSum += Mathf.Abs(PlayerWavePowers[i]);
                 changedPowerSum += Mathf.Abs(PlayerWavePowers[i] + EnemyWavePowers[i]);
             }
-            Debug.Log($"{Ids}の倍率{changedPowerSum / originalPowerSum}");
+            //Debug.Log($"{Ids}の倍率{changedPowerSum / originalPowerSum}");
+            if(changedPowerSum/originalPowerSum < 0.3f)
+            {
+                DestoryWave(ids,PlayerWaveIds,PlayerWavePowers);
+            }
         }
+    }
+
+    private void DestoryWave(int id,List<int> ids,List<float> powers)
+    {
+        
     }
 }
