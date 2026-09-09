@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using UnityEngine; //Debug.Log用
 
 public class Medium
 {
@@ -25,6 +26,14 @@ public class Medium
         }
     }
 
+    public List<int> ToUniqueIds()
+    {
+        List<int> idsSet = waveIds.Distinct().ToList();
+        idsSet.Remove(0);
+
+        return idsSet;
+    }
+
     public void LeftWaveMove(float wavePower)
     {
         for (int i = 0; i < division - 1; i++)
@@ -47,7 +56,7 @@ public class Medium
         wavePowers[0] = wavePower;
     }
 
-    public void WavePowerCheck()
+    public void WavePowerCheck(Medium opposite)
     {
         List<int> idsSet = waveIds.Distinct().ToList();
         idsSet.Remove(0);
@@ -60,11 +69,31 @@ public class Medium
                 if (waveIds[i] != ids) continue;
 
                 originalPowerSum += Math.Abs(wavePowers[i]);
-                changedPowerSum += Math.Abs(wavePowers[i] + wavePowers[i]);
+                changedPowerSum += Math.Abs(wavePowers[i] + opposite.wavePowers[i]);
             }
-            //Debug.Log($"{Ids}の倍率{changedPowerSum / originalPowerSum}");
+
+            if (changedPowerSum / originalPowerSum <= 0.3) DestroyWave(ids, opposite);
+
         }
 
+    }
 
+    public void SelectTooSmallWave(Medium opposite)
+    {
+        
+    }
+    private void DestroyWave(int id, Medium opposite)
+    {
+        for (int i = 0; i < division; i++)
+        {
+            if (waveIds[i] == id)
+            {
+                waveIds[i] = 0;
+                wavePowers[i] = 0;
+
+                opposite.waveIds[i] = 0;
+                opposite.waveIds[i] = 0;
+            }
+        }
     }
 }

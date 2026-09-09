@@ -60,13 +60,11 @@ public class LineSample : MonoBehaviour
 
         moveInterval = IntervalChange();
 
+        WavePowerCheck();
+
         if (Keyboard.current.aKey.wasPressedThisFrame)
         {
             MakeSinWave();
-        }
-        if (Keyboard.current.sKey.wasPressedThisFrame)
-        {
-            WavePowerCheck();
         }
     }
 
@@ -132,7 +130,7 @@ public class LineSample : MonoBehaviour
 
 
         //int型同士の計算はintになってしまうので気を付ける
-        return originalMoveInterval * (1 + (float)onCount / (onCount + offCount));
+        return originalMoveInterval * (1 + (float)onCount * 2 / (onCount + offCount));
 
     }
 
@@ -146,8 +144,8 @@ public class LineSample : MonoBehaviour
 
     private void WavePowerCheck()
     {
-        PlayerMedium.WavePowerCheck();
-        EnemyMedium.WavePowerCheck();
+        PlayerMedium.WavePowerCheck(EnemyMedium);
+        EnemyMedium.WavePowerCheck(PlayerMedium);
     }
 
 }
