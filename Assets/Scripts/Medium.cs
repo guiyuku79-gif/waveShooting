@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using UnityEngine; //Debug.Log用
+using UnityEngine;
+using System.Data.Common; //Debug.Log用
 
 public class Medium
 {
@@ -58,8 +59,7 @@ public class Medium
 
     public void WavePowerCheck(Medium opposite)
     {
-        List<int> idsSet = waveIds.Distinct().ToList();
-        idsSet.Remove(0);
+        List<int> idsSet = ToUniqueIds();
         foreach (int ids in idsSet)
         {
             float originalPowerSum = 0;
@@ -72,17 +72,32 @@ public class Medium
                 changedPowerSum += Math.Abs(wavePowers[i] + opposite.wavePowers[i]);
             }
 
-            if (changedPowerSum / originalPowerSum <= 0.3) DestroyWave(ids, opposite);
+            if (changedPowerSum / originalPowerSum <= 0.3) DestructiveInterference(ids, opposite);
 
         }
 
     }
 
-    public void SelectTooSmallWave(Medium opposite)
+    public void DestroyTooSmallWave()
     {
-        
+        foreach (int id in ToUniqueIds())
+        {
+            if (waveIds[0] == id || waveIds[division - 1] == id) continue;
+            int count = waveIds.Count(x => x == id);
+            if (count <= 5)
+            {
+                for (int i = 0; i < division; i++)
+                {
+                    if (waveIds[i] == id)
+                    {
+                        waveIds[i] = 0;
+                        wavePowers[i] = 0;
+                    }
+                }
+            }
+        }
     }
-    private void DestroyWave(int id, Medium opposite)
+    private void DestructiveInterference(int id, Medium opposite)
     {
         for (int i = 0; i < division; i++)
         {

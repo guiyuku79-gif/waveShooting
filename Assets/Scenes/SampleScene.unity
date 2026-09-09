@@ -766,16 +766,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineSample
   Player: {fileID: 484412720}
   line: {fileID: 2002192495}
-  pointCount: 200
-  amplitude: 1
-  frequency: 0.5
-  width: 10
   originalMoveInterval: 0.1
   division: 100
-  PlayerWavePowers: []
-  PlayerWaveIds: 
-  EnemyWavePowers: []
-  EnemyWaveIds: 
 --- !u!114 &2002192497
 MonoBehaviour:
   m_ObjectHideFlags: 0

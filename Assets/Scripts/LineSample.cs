@@ -146,6 +146,9 @@ public class LineSample : MonoBehaviour
     {
         PlayerMedium.WavePowerCheck(EnemyMedium);
         EnemyMedium.WavePowerCheck(PlayerMedium);
+
+        PlayerMedium.DestroyTooSmallWave();
+        EnemyMedium.DestroyTooSmallWave();
     }
 
 }
