@@ -15,11 +15,9 @@ public class LineSample : MonoBehaviour
     private float deltaTimeCount;
     [SerializeField] public int division = 100;//100個の点で表現
 
-    [NonSerialized] public Medium PlayerMedium;
-    [NonSerialized] public Medium EnemyMedium;
+    [NonSerialized] public PlayerMedium playerMedium;
+    [NonSerialized] public EnemyMedium enemyMedium;
 
-
-    private List<float> NextEnemyWaveList = new List<float>();
 
     //シングルトン
     public static LineSample Instance { get; private set; }
@@ -36,17 +34,10 @@ public class LineSample : MonoBehaviour
 
     void Start()
     {
-        PlayerMedium = new Medium(division);
-        EnemyMedium = new Medium(division);
-
+        playerMedium = new PlayerMedium(division);
+        enemyMedium = new EnemyMedium(division);
 
         deltaTimeCount = 0f;
-
-        //仮
-        for (int i = 0; i < 20; i++)
-        {
-            NextEnemyWaveList.Add(i * 0.1f);
-        }
     }
 
     void Update()
@@ -70,41 +61,12 @@ public class LineSample : MonoBehaviour
 
     private void MoveWave()
     {
+        playerMedium.WaveMove(Mouse.current.leftButton.isPressed, Player.transform.position.y);
 
-        if (Mouse.current.leftButton.isPressed)
-        {
-            PlayerMedium.RightWaveMove(Player.transform.position.y);
-        }
-        else
-        {
-            PlayerMedium.RightWaveMove(0);
-        }
+        enemyMedium.WaveMove();
 
-        if (NextEnemyWaveList.Count == 0)
-        {
-            EnemyMedium.LeftWaveMove(0);
-        }
-        else
-        {
-            EnemyMedium.LeftWaveMove(NextEnemyWaveList[0]);
-            NextEnemyWaveList.RemoveAt(0);
-        }
-
-        WaveIDCheck();
     }
 
-    private void WaveIDCheck()
-    {
-        if (PlayerMedium.waveIds[0] == 0 && PlayerMedium.waveIds[1] != 0)
-        {
-            PlayerMedium.nextWaveId++;
-            Debug.Log(PlayerMedium.nextWaveId);
-        }
-        if (EnemyMedium.waveIds[division - 1] == 0 && EnemyMedium.waveIds[division - 2] != 0)
-        {
-            EnemyMedium.nextWaveId++;
-        }
-    }
 
     //波が重なっているほど時間をゆっくりにする
     private float IntervalChange()
@@ -114,21 +76,17 @@ public class LineSample : MonoBehaviour
 
         for (int i = 0; i < division; i++)
         {
-            if (PlayerMedium.waveIds[i] != 0 && EnemyMedium.waveIds[i] != 0)
+            if (playerMedium.waveIds[i] != 0 && enemyMedium.waveIds[i] != 0)
             {
                 onCount++;
             }
-            else if (PlayerMedium.waveIds[i] != 0 || EnemyMedium.waveIds[i] != 0)
+            else if (playerMedium.waveIds[i] != 0 || enemyMedium.waveIds[i] != 0)
             {
                 offCount++;
             }
         }
 
-
-
         if (onCount + offCount == 0) return originalMoveInterval;
-
-
         //int型同士の計算はintになってしまうので気を付ける
         return originalMoveInterval * (1 + (float)onCount * 2 / (onCount + offCount));
 
@@ -136,19 +94,16 @@ public class LineSample : MonoBehaviour
 
     private void MakeSinWave()
     {
-        for (int i = 0; i < 30; i++)
-        {
-            NextEnemyWaveList.Add(Mathf.Sin(Mathf.PI * i / 15) * 2);
-        }
+        enemyMedium.MakeSinWave();
     }
 
     private void WavePowerCheck()
     {
-        PlayerMedium.WavePowerCheck(EnemyMedium);
-        EnemyMedium.WavePowerCheck(PlayerMedium);
+        playerMedium.WavePowerCheck(enemyMedium);
+        enemyMedium.WavePowerCheck(playerMedium);
 
-        PlayerMedium.DestroyTooSmallWave();
-        EnemyMedium.DestroyTooSmallWave();
+        playerMedium.DestroyTooSmallWave();
+        enemyMedium.DestroyTooSmallWave();
     }
 
 }

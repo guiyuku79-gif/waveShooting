@@ -6,7 +6,7 @@ using System.Data.Common; //Debug.Log用
 
 public class Medium
 {
-    private int division;
+    public int division;
     public List<float> wavePowers;
     public List<int> waveIds;
 
@@ -33,28 +33,6 @@ public class Medium
         idsSet.Remove(0);
 
         return idsSet;
-    }
-
-    public void LeftWaveMove(float wavePower)
-    {
-        for (int i = 0; i < division - 1; i++)
-        {
-            wavePowers[i] = wavePowers[i + 1];
-            waveIds[i] = waveIds[i + 1];
-        }
-        wavePowers[division - 1] = wavePower;
-        waveIds[division - 1] = wavePower == 0 ? 0 : nextWaveId;
-    }
-
-    public void RightWaveMove(float wavePower)
-    {
-        for (int i = division - 1; i > 0; i--)
-        {
-            wavePowers[i] = wavePowers[i - 1];
-            waveIds[i] = waveIds[i - 1];
-        }
-        waveIds[0] = wavePower == 0 ? 0 : nextWaveId;
-        wavePowers[0] = wavePower;
     }
 
     public void WavePowerCheck(Medium opposite)

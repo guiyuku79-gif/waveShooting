@@ -23,8 +23,8 @@ public class WaveParticleController : MonoBehaviour
             spriteRenderer.color = Color.yellow;
         }
 
-        playerMedium = LineSample.Instance.PlayerMedium;
-        enemyMedium = LineSample.Instance.EnemyMedium;
+        playerMedium = LineSample.Instance.playerMedium;
+        enemyMedium = LineSample.Instance.enemyMedium;
         transform.position = new Vector3((id - LineSample.Instance.division / 2) * particleInterval, 0, 0);
     }
 
