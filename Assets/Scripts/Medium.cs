@@ -78,6 +78,7 @@ public class Medium
 
     }
 
+
     public void DestroyTooSmallWave()
     {
         foreach (int id in ToUniqueIds())
