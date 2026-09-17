@@ -13,7 +13,10 @@ public class LineSample : MonoBehaviour
 
     private float moveInterval;
     private float deltaTimeCount;
+
+    //基準線のデータ
     [SerializeField] public int division = 100;//100個の点で表現
+    [SerializeField] public int width = 4;//平行位置の長さ
 
     [NonSerialized] public PlayerMedium playerMedium;
     [NonSerialized] public EnemyMedium enemyMedium;
