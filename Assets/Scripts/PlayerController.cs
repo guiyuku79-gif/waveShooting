@@ -7,6 +7,11 @@ public class PlayerController : MonoBehaviour
 
     private float velocityY;
 
+    void Start()
+    {
+        transform.position = new Vector3(-LineSample.Instance.width / 2, 0, 0);
+    }
+
     void Update()
     {
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());

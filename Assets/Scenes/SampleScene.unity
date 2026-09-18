@@ -604,7 +604,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 0.05, z: 1}
+  m_LocalScale: {x: 15, y: 0.05, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -766,8 +766,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineSample
   Player: {fileID: 484412720}
   line: {fileID: 2002192495}
-  originalMoveInterval: 0.1
   division: 100
+  width: 10
+  waveSpeed: 1
 --- !u!114 &2002192497
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using UnityEngine;
-using System.Data.Common; //Debug.Log用
+using System.Data.Common;
+using UnityEngine.UIElements; //Debug.Log用
 
 public class EnemyMedium : Medium
 {
-    public EnemyMedium(int division)
-    : base(division)
+    public EnemyMedium(int division, float width)
+    : base(division, width)
     {
         //仮
         for (int i = 0; i < 20; i++)
@@ -19,11 +20,12 @@ public class EnemyMedium : Medium
 
     List<(int id, float displacement)> nextEnemyWaveList = new();
 
-    public void MakeSinWave()
+    public void MakeSinWave(float waveLength, float amplitude, int wavecount)
     {
-        for (int i = 0; i < 30; i++)
+
+        for (int i = 0; i < division / width * waveLength * wavecount; i++)
         {
-            nextEnemyWaveList.Add((nextWaveId, Mathf.Sin(Mathf.PI * i / 15) * 2));
+            nextEnemyWaveList.Add((nextWaveId, Mathf.Sin(2 * Mathf.PI * i * width / division / waveLength) * amplitude));
         }
         nextWaveId++;
     }

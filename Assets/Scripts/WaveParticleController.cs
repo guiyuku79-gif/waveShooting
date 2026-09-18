@@ -25,7 +25,7 @@ public class WaveParticleController : MonoBehaviour
 
         playerMedium = LineSample.Instance.playerMedium;
         enemyMedium = LineSample.Instance.enemyMedium;
-        transform.position = new Vector3((id - LineSample.Instance.division / 2) * particleInterval, 0, 0);
+        transform.position = new Vector3((id - LineSample.Instance.division / 2) * LineSample.Instance.width/LineSample.Instance.division, 0, 0);
     }
 
     void Update()

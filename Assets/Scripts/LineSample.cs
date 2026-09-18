@@ -9,14 +9,20 @@ public class LineSample : MonoBehaviour
     [SerializeField] GameObject Player;
     public LineRenderer line;
 
-    [SerializeField] private float originalMoveInterval = 0.1f;
+    private float originalMoveInterval;
 
     private float moveInterval;
     private float deltaTimeCount;
 
     //基準線のデータ
-    [SerializeField] public int division = 100;//100個の点で表現
-    [SerializeField] public int width = 4;//平行位置の長さ
+    [Tooltip("媒質の点をいくつで表現するか決めます")]
+    [SerializeField] public int division = 100;
+
+    [Tooltip("媒質の長さ")]
+    [SerializeField] public float width = 8f;//平行位置の長さ
+
+    [Tooltip("波の進む速さ")]
+    [SerializeField] public float waveSpeed = 1f;//秒速
 
     [NonSerialized] public PlayerMedium playerMedium;
     [NonSerialized] public EnemyMedium enemyMedium;
@@ -37,10 +43,12 @@ public class LineSample : MonoBehaviour
 
     void Start()
     {
-        playerMedium = new PlayerMedium(division);
-        enemyMedium = new EnemyMedium(division);
+        playerMedium = new PlayerMedium(division, width);
+        enemyMedium = new EnemyMedium(division, width);
 
         deltaTimeCount = 0f;
+
+        originalMoveInterval = 1 / (division / width * waveSpeed);
     }
 
     void Update()
@@ -56,9 +64,10 @@ public class LineSample : MonoBehaviour
 
         WavePowerCheck();
 
+        //仮
         if (Keyboard.current.aKey.wasPressedThisFrame)
         {
-            MakeSinWave();
+            enemyMedium.MakeSinWave(4, 2, 1);
         }
     }
 
@@ -93,11 +102,6 @@ public class LineSample : MonoBehaviour
         //int型同士の計算はintになってしまうので気を付ける
         return originalMoveInterval * (1 + (float)onCount * 2 / (onCount + offCount));
 
-    }
-
-    private void MakeSinWave()
-    {
-        enemyMedium.MakeSinWave();
     }
 
     private void WavePowerCheck()

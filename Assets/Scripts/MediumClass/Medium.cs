@@ -7,14 +7,17 @@ using System.Data.Common; //Debug.Log用
 public class Medium
 {
     public int division;
+
+    public float width;
     public List<float> wavePowers;
     public List<int> waveIds;
 
     public int nextWaveId;
 
-    public Medium(int division)
+    public Medium(int division, float width)
     {
         this.division = division;
+        this.width = width;
         nextWaveId = 1;
 
         wavePowers = new List<float>();
