@@ -7,8 +7,8 @@ using UnityEngine.UIElements; //Debug.Log用
 
 public class EnemyMedium : Medium
 {
-    public EnemyMedium(int division, float width)
-    : base(division, width)
+    public EnemyMedium()
+    : base()
     {
         //仮
         for (int i = 0; i < 20; i++)

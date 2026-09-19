@@ -812,10 +812,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LineSample
   Player: {fileID: 484412720}
+  waveLendererObject: {fileID: 2186664634343004805, guid: 22c8b3c4383b4064fa1688d5e9f272f9, type: 3}
   line: {fileID: 2002192495}
-  division: 100
-  width: 10
-  waveSpeed: 1
 --- !u!114 &2002192497
 MonoBehaviour:
   m_ObjectHideFlags: 0

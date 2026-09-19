@@ -6,8 +6,8 @@ using System.Data.Common; //Debug.Log用
 
 public class PlayerMedium : Medium
 {
-    public PlayerMedium(int division, float width)
-    : base(division, width)
+    public PlayerMedium()
+    : base()
     {
     }
 

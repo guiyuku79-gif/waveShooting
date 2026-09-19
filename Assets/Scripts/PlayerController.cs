@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        transform.position = new Vector3(-LineSample.Instance.width / 2, 0, 0);
+        transform.position = new Vector3(-Constants.Width / 2, 0, 0);
     }
 
     void Update()

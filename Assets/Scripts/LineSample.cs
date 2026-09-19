@@ -7,6 +7,8 @@ using System;
 public class LineSample : MonoBehaviour
 {
     [SerializeField] GameObject Player;
+
+    [SerializeField] GameObject waveLendererObject;
     public LineRenderer line;
 
     private float originalMoveInterval;
@@ -14,15 +16,6 @@ public class LineSample : MonoBehaviour
     private float moveInterval;
     private float deltaTimeCount;
 
-    //基準線のデータ
-    [Tooltip("媒質の点をいくつで表現するか決めます")]
-    [SerializeField] public int division = 100;
-
-    [Tooltip("媒質の長さ")]
-    [SerializeField] public float width = 8f;//平行位置の長さ
-
-    [Tooltip("波の進む速さ")]
-    [SerializeField] public float waveSpeed = 1f;//秒速
 
     [NonSerialized] public PlayerMedium playerMedium;
     [NonSerialized] public EnemyMedium enemyMedium;
@@ -43,12 +36,15 @@ public class LineSample : MonoBehaviour
 
     void Start()
     {
-        playerMedium = new PlayerMedium(division, width);
-        enemyMedium = new EnemyMedium(division, width);
+        playerMedium = new PlayerMedium();
+        enemyMedium = new EnemyMedium();
 
         deltaTimeCount = 0f;
 
-        originalMoveInterval = 1 / (division / width * waveSpeed);
+        originalMoveInterval = 1 / (Constants.Division / Constants.Width * Constants.WaveSpeed);
+
+        GameObject gameObject = Instantiate(waveLendererObject);
+        gameObject.GetComponent<OneWaveLenderer>().Init(playerMedium, 2);
     }
 
     void Update()
@@ -86,7 +82,7 @@ public class LineSample : MonoBehaviour
         int onCount = 0;
         int offCount = 0;
 
-        for (int i = 0; i < division; i++)
+        for (int i = 0; i < Constants.Division; i++)
         {
             if (playerMedium.waveIds[i] != 0 && enemyMedium.waveIds[i] != 0)
             {

@@ -2,22 +2,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using UnityEngine;
-using System.Data.Common; //Debug.Log用
+using System.Data.Common;
+using UnityEngine.AdaptivePerformance; //Debug.Log用
 
 public class Medium
 {
     public int division;
-
     public float width;
     public List<float> wavePowers;
     public List<int> waveIds;
 
     public int nextWaveId;
 
-    public Medium(int division, float width)
+    public Medium()
     {
-        this.division = division;
-        this.width = width;
+        this.division = Constants.Division;
+        this.width = Constants.Width;
         nextWaveId = 1;
 
         wavePowers = new List<float>();
