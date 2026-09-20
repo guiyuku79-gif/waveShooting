@@ -4,4 +4,10 @@ public static class Constants
     public const float Width = 10; //媒質の幅
     public const float WaveSpeed = 1f; //波の速さ
 
+    public enum WaveType
+    {
+        Player,
+        Enemy
+    }
+
 }

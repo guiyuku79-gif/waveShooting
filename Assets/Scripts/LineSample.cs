@@ -26,8 +26,8 @@ public class LineSample : MonoBehaviour
 
     void Start()
     {
-        playerMedium = new PlayerMedium();
-        enemyMedium = new EnemyMedium();
+        playerMedium = new PlayerMedium(new Color32(255, 0, 0, 122));
+        enemyMedium = new EnemyMedium(new Color32(0, 255, 0, 122));
 
         deltaTimeCount = 0f;
 

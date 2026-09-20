@@ -19,8 +19,8 @@ public class OneWaveLenderer : MonoBehaviour
         line.startWidth = 0.05f;
         line.endWidth = 0.05f;
 
-        line.startColor = Color.red;
-        line.endColor = Color.red;
+        line.startColor = medium.WaveColor;
+        line.endColor = medium.WaveColor;
     }
 
     void Update()

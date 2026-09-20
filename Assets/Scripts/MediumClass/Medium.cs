@@ -14,11 +14,15 @@ public class Medium
 
     public int nextWaveId;
 
+    public Color32 WaveColor {get;private set ;}
 
-    public Medium()
+
+    public Medium(Color32 color)
     {
         this.division = Constants.Division;
         this.width = Constants.Width;
+
+        WaveColor = color;
 
         nextWaveId = 1;
 
