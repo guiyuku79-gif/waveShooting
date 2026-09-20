@@ -14,10 +14,12 @@ public class Medium
 
     public int nextWaveId;
 
+
     public Medium()
     {
         this.division = Constants.Division;
         this.width = Constants.Width;
+
         nextWaveId = 1;
 
         wavePowers = new List<float>();
@@ -92,5 +94,42 @@ public class Medium
                 opposite.waveIds[i] = 0;
             }
         }
+    }
+
+    public List<int> ReNewSeparetedWaveId()
+    {
+        List<int> newIds = new List<int>();
+
+        foreach (int id in ToUniqueIds())
+        {
+            int index = waveIds.IndexOf(id);
+
+            if (index == -1)
+                continue;
+
+            // 最初の連続した id を飛ばす
+            while (index < waveIds.Count && waveIds[index] == id)
+            {
+                index++;
+            }
+
+            // 最初の連続部分より後ろにある id を探す
+            while (index < waveIds.Count)
+            {
+                if (waveIds[index] == id)
+                {
+                    waveIds[index] += 1000000;
+
+                    if (!newIds.Contains(id + 1000000))
+                    {
+                        newIds.Add(id + 1000000);
+                    }
+                }
+
+                index++;
+            }
+        }
+
+        return newIds;
     }
 }

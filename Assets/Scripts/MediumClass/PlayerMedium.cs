@@ -23,13 +23,16 @@ public class PlayerMedium : Medium
         waveIds[0] = isPressed ? nextWaveId : 0;
         wavePowers[0] = displacement;
     }
-    public void WaveMove(bool isPressed, float displacement)
+    public List<int> WaveMove(bool isPressed, float displacement)
     {
+        List<int> newIds = new List<int>();
         if (isPressed)
         {
             if (!isShooting)
             {
                 nextWaveId++;
+                newIds.Add(nextWaveId);
+                
                 isShooting = true;
             }
 
@@ -41,6 +44,8 @@ public class PlayerMedium : Medium
 
             RightWaveMove(isPressed, 0);
         }
+
+        return newIds;
     }
 
 }

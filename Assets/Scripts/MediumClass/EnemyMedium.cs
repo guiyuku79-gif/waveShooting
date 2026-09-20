@@ -10,17 +10,11 @@ public class EnemyMedium : Medium
     public EnemyMedium()
     : base()
     {
-        //仮
-        for (int i = 0; i < 20; i++)
-        {
-            nextEnemyWaveList.Add((1, i * 0.1f));
-            nextWaveId = 2;
-        }
     }
 
     List<(int id, float displacement)> nextEnemyWaveList = new();
 
-    public void MakeSinWave(float waveLength, float amplitude, int wavecount)
+    public void MakeSinWave(float waveLength, float amplitude, float wavecount)
     {
 
         for (int i = 0; i < division / width * waveLength * wavecount; i++)
@@ -30,7 +24,7 @@ public class EnemyMedium : Medium
         nextWaveId++;
     }
 
-    public void LeftWaveMove(bool isPressed, float wavePower)
+    public void LeftWaveMove(bool isPressed, float wavePower, int id)
     {
         for (int i = 0; i < division - 1; i++)
         {
@@ -38,20 +32,25 @@ public class EnemyMedium : Medium
             waveIds[i] = waveIds[i + 1];
         }
         wavePowers[division - 1] = wavePower;
-        waveIds[division - 1] = isPressed ? nextWaveId : 0;
+        waveIds[division - 1] = isPressed ? id : 0;
     }
 
-    public void WaveMove()
+    public List<int> WaveMove()
     {
+        List<int> newIds = new List<int>();
         if (nextEnemyWaveList.Count == 0)
         {
-            LeftWaveMove(false, 0);
+            LeftWaveMove(false, 0, -1);
         }
         else
         {
-            LeftWaveMove(true, nextEnemyWaveList[0].displacement);
+            if (waveIds.IndexOf(nextEnemyWaveList[0].id) == -1) newIds.Add(nextEnemyWaveList[0].id);
+            LeftWaveMove(true, nextEnemyWaveList[0].displacement, nextEnemyWaveList[0].id);
+
             nextEnemyWaveList.RemoveAt(0);
         }
+
+        return newIds;
     }
 
 }
