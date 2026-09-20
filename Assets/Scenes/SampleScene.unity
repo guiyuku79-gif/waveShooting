@@ -827,6 +827,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveParticleGenerator
   ParticlePrefab: {fileID: 5050094176715022903, guid: 816aa9fdaccbfa74b84386fcd95219b7, type: 3}
+  lineSample: {fileID: 2002192496}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

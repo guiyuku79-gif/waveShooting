@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System.Linq;
 using System;
-using System.Data.Common;
-using UnityEditor.U2D.Aseprite;
 
 public class LineSample : MonoBehaviour
 {
@@ -25,19 +23,6 @@ public class LineSample : MonoBehaviour
     [NonSerialized] public PlayerMedium playerMedium;
     [NonSerialized] public EnemyMedium enemyMedium;
 
-
-    //シングルトン
-    public static LineSample Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
 
     void Start()
     {

@@ -10,7 +10,7 @@ public class WaveParticleController : MonoBehaviour
 
     private Medium playerMedium;
     private Medium enemyMedium;
-    public void Init(int id, string charge)
+    public void Init(int id, string charge,Medium player,Medium enemy)
     {
         this.id = id;
         this.charge = charge;
@@ -23,8 +23,8 @@ public class WaveParticleController : MonoBehaviour
             spriteRenderer.color = Color.yellow;
         }
 
-        playerMedium = LineSample.Instance.playerMedium;
-        enemyMedium = LineSample.Instance.enemyMedium;
+        playerMedium = player;
+        enemyMedium = enemy;
         transform.position = new Vector3((id - Constants.Division / 2) * Constants.Width / Constants.Division, 0, 0);
     }
 
