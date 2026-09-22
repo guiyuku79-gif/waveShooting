@@ -14,7 +14,9 @@ public class Medium
 
     public int nextWaveId;
 
-    public Color32 WaveColor {get;private set ;}
+    public Color32 WaveColor { get; private set; }
+
+    Dictionary<int, float> priviousWavePowers;
 
 
     public Medium(Color32 color)
@@ -34,6 +36,8 @@ public class Medium
             wavePowers.Add(0f);
             waveIds.Add(0);
         }
+
+        priviousWavePowers = new Dictionary<int, float>();
     }
 
     public List<int> ToUniqueIds()
@@ -47,6 +51,9 @@ public class Medium
     public void WavePowerCheck(Medium opposite)
     {
         List<int> idsSet = ToUniqueIds();
+
+        //前回の減少率を記憶しておく
+        Dictionary<int, float> newWavePowers = new Dictionary<int, float>();
         foreach (int ids in idsSet)
         {
             float originalPowerSum = 0;
@@ -59,10 +66,15 @@ public class Medium
                 changedPowerSum += Math.Abs(wavePowers[i] + opposite.wavePowers[i]);
             }
 
-            if (changedPowerSum / originalPowerSum <= 0.3) DestructiveInterference(ids, opposite);
+            newWavePowers.Add(ids, changedPowerSum / originalPowerSum);
+
+            if (!priviousWavePowers.ContainsKey(ids)) continue;
+
+            if (changedPowerSum / originalPowerSum <= 0.35f && priviousWavePowers[ids] <= changedPowerSum / originalPowerSum) DestructiveInterference(ids, opposite);
 
         }
 
+        priviousWavePowers = newWavePowers;
     }
 
 
