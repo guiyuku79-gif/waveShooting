@@ -9,6 +9,8 @@ public class Medium
 {
     public int division;
     public float width;
+
+    public float laneY;
     public List<float> wavePowers;
     public List<int> waveIds;
 
@@ -21,10 +23,11 @@ public class Medium
     Dictionary<int, float> priviousWavePowers;
 
 
-    public Medium(Color32 color)
+    public Medium(Color32 color,float laneY)
     {
         this.division = Constants.Division;
         this.width = Constants.Width;
+        this.laneY = laneY;
 
         WaveColor = color;
 
@@ -150,35 +153,6 @@ public class Medium
             }
             if (waveIds.Contains(nextWaveIdForSeparate)) nextWaveIdForSeparate++;
         }
-        // foreach (int id in ToUniqueIds())
-        // {
-        //     int index = waveIds.IndexOf(id);
-
-        //     if (index == -1)
-        //         continue;
-
-        //     // 最初の連続した id を飛ばす
-        //     while (index < waveIds.Count && waveIds[index] == id)
-        //     {
-        //         index++;
-        //     }
-
-        //     // 最初の連続部分より後ろにある id を探す
-        //     while (index < waveIds.Count)
-        //     {
-        //         if (waveIds[index] == id)
-        //         {
-        //             waveIds[index] += 1000000;
-
-        //             if (!newIds.Contains(id + 1000000))
-        //             {
-        //                 newIds.Add(id + 1000000);
-        //             }
-        //         }
-
-        //         index++;
-        //     }
-        // }
 
         return newIds;
     }

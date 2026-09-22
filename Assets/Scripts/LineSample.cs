@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
-using System.Linq;
 using System;
 
 public class LineSample : MonoBehaviour
@@ -9,12 +8,13 @@ public class LineSample : MonoBehaviour
     [SerializeField] GameObject Player;
 
     [SerializeField] GameObject waveLendererObject;
-    public LineRenderer line;
 
     private float originalMoveInterval;
 
     private float moveInterval;
     private float deltaTimeCount;
+
+    private float laneY;
 
     private Dictionary<int, GameObject> playerWaves = new Dictionary<int, GameObject>();
     private Dictionary<int, GameObject> enemyWaves = new Dictionary<int, GameObject>();
@@ -26,14 +26,21 @@ public class LineSample : MonoBehaviour
 
     void Start()
     {
-        playerMedium = new PlayerMedium(new Color32(255, 0, 0, 122));
-        enemyMedium = new EnemyMedium(new Color32(0, 255, 0, 122));
+        Init(1f);
+    }
+
+    public void Init(float laneY)
+    {
+        this.laneY = laneY;
+
+        playerMedium = new PlayerMedium(new Color32(255, 0, 0, 122), laneY);
+        enemyMedium = new EnemyMedium(new Color32(0, 255, 0, 122), laneY);
 
         deltaTimeCount = 0f;
 
+
+
         originalMoveInterval = 1 / (Constants.Division / Constants.Width * Constants.WaveSpeed);
-
-
     }
 
     void Update()

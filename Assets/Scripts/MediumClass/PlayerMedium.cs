@@ -6,8 +6,8 @@ using System.Data.Common; //Debug.Log用
 
 public class PlayerMedium : Medium
 {
-    public PlayerMedium(Color32 color)
-    : base(color)
+    public PlayerMedium(Color32 color,float laneY)
+    : base(color,laneY)
     {
     }
 

@@ -38,12 +38,12 @@ public class OneWaveLenderer : MonoBehaviour
             if (oppositeMedium.waveIds[j] != 0)
             {
                 line.SetPosition(i, new Vector3((j - Constants.Division / 2) * Constants.Width / Constants.Division,
-                                 medium.wavePowers[j] + oppositeMedium.wavePowers[j], 0));
+                                 medium.wavePowers[j] + oppositeMedium.wavePowers[j] + medium.laneY, 0));
             }
             else
             {
                 line.SetPosition(i, new Vector3((j - Constants.Division / 2) * Constants.Width / Constants.Division,
-                                 medium.wavePowers[j], 0));
+                                 medium.wavePowers[j] + medium.laneY, 0));
             }
 
             i++;

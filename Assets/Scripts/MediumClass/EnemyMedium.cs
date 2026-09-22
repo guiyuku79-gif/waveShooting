@@ -7,8 +7,8 @@ using UnityEngine.UIElements; //Debug.Log用
 
 public class EnemyMedium : Medium
 {
-    public EnemyMedium(Color32 color)
-    : base(color)
+    public EnemyMedium(Color32 color, float laneY)
+    : base(color, laneY)
     {
     }
 

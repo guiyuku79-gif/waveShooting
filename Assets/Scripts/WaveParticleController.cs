@@ -10,7 +10,7 @@ public class WaveParticleController : MonoBehaviour
 
     private Medium playerMedium;
     private Medium enemyMedium;
-    public void Init(int id, string charge,Medium player,Medium enemy)
+    public void Init(int id, string charge, Medium player, Medium enemy)
     {
         this.id = id;
         this.charge = charge;
@@ -40,8 +40,8 @@ public class WaveParticleController : MonoBehaviour
             {
                 spriteRenderer.enabled = true;
 
-                if (enemyMedium.waveIds[id] == 0) transform.position = new Vector3(transform.position.x, playerMedium.wavePowers[id], 0);
-                else transform.position = new Vector3(transform.position.x, playerMedium.wavePowers[id] + enemyMedium.wavePowers[id], 0);
+                if (enemyMedium.waveIds[id] == 0) transform.position = new Vector3(transform.position.x, playerMedium.wavePowers[id] + playerMedium.laneY, 0);
+                else transform.position = new Vector3(transform.position.x, playerMedium.wavePowers[id] + enemyMedium.wavePowers[id] + playerMedium.laneY, 0);
             }
         }
         else
@@ -54,8 +54,8 @@ public class WaveParticleController : MonoBehaviour
             {
                 spriteRenderer.enabled = true;
 
-                if (playerMedium.waveIds[id] == 0) transform.position = new Vector3(transform.position.x, enemyMedium.wavePowers[id], 0);
-                else transform.position = new Vector3(transform.position.x, playerMedium.wavePowers[id] + enemyMedium.wavePowers[id], 0);
+                if (playerMedium.waveIds[id] == 0) transform.position = new Vector3(transform.position.x, enemyMedium.wavePowers[id] + playerMedium.laneY, 0);
+                else transform.position = new Vector3(transform.position.x, playerMedium.wavePowers[id] + enemyMedium.wavePowers[id] + playerMedium.laneY, 0);
             }
         }
 
