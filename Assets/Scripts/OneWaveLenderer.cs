@@ -7,12 +7,15 @@ public class OneWaveLenderer : MonoBehaviour
     LineRenderer line;
 
     Medium medium;
-    int id;
+
+    Medium oppositeMedium;
+    public int id;
 
 
-    public void Init(Medium medium, int id)
+    public void Init(Medium medium, Medium oppositeMedium, int id)
     {
         this.medium = medium;
+        this.oppositeMedium = oppositeMedium;
         this.id = id;
 
         line = GetComponent<LineRenderer>();
@@ -32,8 +35,16 @@ public class OneWaveLenderer : MonoBehaviour
         {
             if (medium.waveIds[j] != id) continue;
 
-            line.SetPosition(i, new Vector3((j - Constants.Division / 2) * Constants.Width / Constants.Division,
-                                             medium.wavePowers[j], 0));
+            if (oppositeMedium.waveIds[j] != 0)
+            {
+                line.SetPosition(i, new Vector3((j - Constants.Division / 2) * Constants.Width / Constants.Division,
+                                 medium.wavePowers[j] + oppositeMedium.wavePowers[j], 0));
+            }
+            else
+            {
+                line.SetPosition(i, new Vector3((j - Constants.Division / 2) * Constants.Width / Constants.Division,
+                                 medium.wavePowers[j], 0));
+            }
 
             i++;
         }

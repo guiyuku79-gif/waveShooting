@@ -32,7 +32,7 @@ public class PlayerMedium : Medium
             {
                 nextWaveId++;
                 newIds.Add(nextWaveId);
-                
+
                 isShooting = true;
             }
 

@@ -51,8 +51,10 @@ public class LineSample : MonoBehaviour
             DestoryOutOfWave(playerMedium, playerWaves);
             DestoryOutOfWave(enemyMedium, enemyWaves);
 
-            playerMedium.ReNewSeparetedWaveId();
-            enemyMedium.ReNewSeparetedWaveId();
+            List<int> newIds = playerMedium.ReNewSeparetedWaveId();
+            MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
+            List<int> newIds2 = enemyMedium.ReNewSeparetedWaveId();
+            MakeNewWave(newIds2, enemyMedium, playerMedium, enemyWaves);
         }
 
         //仮
@@ -65,10 +67,10 @@ public class LineSample : MonoBehaviour
     private void MoveWave()
     {
         List<int> newIds = playerMedium.WaveMove(Mouse.current.leftButton.isPressed, Player.transform.position.y);
-        MakeNewWave(newIds, playerMedium, playerWaves);
+        MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
 
         newIds = enemyMedium.WaveMove();
-        MakeNewWave(newIds, enemyMedium, enemyWaves);
+        MakeNewWave(newIds, enemyMedium, playerMedium, enemyWaves);
 
     }
 
@@ -106,16 +108,18 @@ public class LineSample : MonoBehaviour
         enemyMedium.DestroyTooSmallWave();
     }
 
-    private void MakeNewWave(List<int> ids, Medium medium, Dictionary<int, GameObject> waves)
+    private void MakeNewWave(List<int> ids, Medium medium, Medium oppositeMedium, Dictionary<int, GameObject> waves)
     {
         foreach (int id in ids)
         {
+            if (waves.ContainsKey(id)) return;
             GameObject gameObject = Instantiate(waveLendererObject);
 
             gameObject.transform.SetParent(transform);
-            gameObject.GetComponent<OneWaveLenderer>().Init(medium, id);
-
+            gameObject.GetComponent<OneWaveLenderer>().Init(medium, oppositeMedium, id);
+            Debug.Log(id);
             waves.Add(id, gameObject);
+
         }
     }
 
