@@ -60,7 +60,7 @@ public class LineSample : MonoBehaviour
         //仮
         if (Keyboard.current.aKey.wasPressedThisFrame)
         {
-            enemyMedium.MakeSinWave(4, 2, 1f);
+            enemyMedium.MakeSinWave(4, 2, 1.5f);
         }
     }
 

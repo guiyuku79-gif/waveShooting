@@ -3,7 +3,7 @@ using UnityEngine;
 public class GridGenerator : MonoBehaviour
 {
 
-    [SerializeField] float width = 10;
+    [SerializeField] float width = 12;
     [SerializeField] float height = 4;
     [SerializeField] float gridSize = 1;
 

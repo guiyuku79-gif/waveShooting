@@ -14,6 +14,8 @@ public class Medium
 
     public int nextWaveId;
 
+    public int nextWaveIdForSeparate;
+
     public Color32 WaveColor { get; private set; }
 
     Dictionary<int, float> priviousWavePowers;
@@ -27,6 +29,7 @@ public class Medium
         WaveColor = color;
 
         nextWaveId = 1;
+        nextWaveIdForSeparate = 100000;
 
         wavePowers = new List<float>();
         waveIds = new List<int>();
@@ -70,7 +73,7 @@ public class Medium
 
             if (!priviousWavePowers.ContainsKey(ids)) continue;
 
-            if (changedPowerSum / originalPowerSum <= 0.35f && priviousWavePowers[ids] <= changedPowerSum / originalPowerSum) DestructiveInterference(ids, opposite);
+            if (changedPowerSum / originalPowerSum <= 0.4f && priviousWavePowers[ids] <= changedPowerSum / originalPowerSum) DestructiveInterference(ids, opposite);
 
         }
 
@@ -116,15 +119,16 @@ public class Medium
     {
         List<int> newIds = new List<int>();
 
-        foreach (int id in ToUniqueIds())
+        List<int> uniqueIds = ToUniqueIds();
+        for (int i = 0; i < uniqueIds.Count; i++)
         {
-            int index = waveIds.IndexOf(id);
+            int index = waveIds.IndexOf(uniqueIds[i]);
 
             if (index == -1)
                 continue;
 
             // 最初の連続した id を飛ばす
-            while (index < waveIds.Count && waveIds[index] == id)
+            while (index < waveIds.Count && waveIds[index] == uniqueIds[i])
             {
                 index++;
             }
@@ -132,19 +136,49 @@ public class Medium
             // 最初の連続部分より後ろにある id を探す
             while (index < waveIds.Count)
             {
-                if (waveIds[index] == id)
+                if (waveIds[index] == uniqueIds[i])
                 {
-                    waveIds[index] += 1000000;
+                    waveIds[index] = nextWaveIdForSeparate;
 
-                    if (!newIds.Contains(id + 1000000))
+                    if (!newIds.Contains(nextWaveIdForSeparate))
                     {
-                        newIds.Add(id + 1000000);
+                        newIds.Add(nextWaveIdForSeparate);
                     }
                 }
 
                 index++;
             }
+            if (waveIds.Contains(nextWaveIdForSeparate)) nextWaveIdForSeparate++;
         }
+        // foreach (int id in ToUniqueIds())
+        // {
+        //     int index = waveIds.IndexOf(id);
+
+        //     if (index == -1)
+        //         continue;
+
+        //     // 最初の連続した id を飛ばす
+        //     while (index < waveIds.Count && waveIds[index] == id)
+        //     {
+        //         index++;
+        //     }
+
+        //     // 最初の連続部分より後ろにある id を探す
+        //     while (index < waveIds.Count)
+        //     {
+        //         if (waveIds[index] == id)
+        //         {
+        //             waveIds[index] += 1000000;
+
+        //             if (!newIds.Contains(id + 1000000))
+        //             {
+        //                 newIds.Add(id + 1000000);
+        //             }
+        //         }
+
+        //         index++;
+        //     }
+        // }
 
         return newIds;
     }
