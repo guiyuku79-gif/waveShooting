@@ -1,18 +1,34 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float maxSpeed = 1f;
     [SerializeField] private float smoothTime = 0.1f;
+    [SerializeField] private Image FuelImage;
 
     private float velocityY;
+
+    //波の残量についての変数
+    public float FuelRate { get; private set; }
+
+    private float fuelConsumeSpeed = 0.2f;
+    private float fuelChargeSpeed = 0.4f;
 
     void Start()
     {
         transform.position = new Vector3(-Constants.Width / 2, 0, 0);
+
+        FuelRate = 1.0f;
     }
 
     void Update()
+    {
+        Move();
+        FuelChange();
+    }
+
+    private void Move()
     {
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
@@ -55,5 +71,20 @@ public class PlayerController : MonoBehaviour
             newY,
             transform.position.z
         );
+    }
+
+    private void FuelChange()
+    {
+        if (Mouse.current.leftButton.isPressed)
+        {
+            FuelRate -= fuelConsumeSpeed * Time.deltaTime;
+            if (FuelRate <= 0f) FuelRate = 0f;
+        }
+        else
+        {
+            FuelRate += fuelChargeSpeed * Time.deltaTime;
+            if (FuelRate >= 1f) FuelRate = 1f;
+        }
+        FuelImage.fillAmount = FuelRate;
     }
 }
