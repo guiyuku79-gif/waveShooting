@@ -45,16 +45,14 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        float targetY;
+        float targetY = mouseWorld.y;
         if (Mouse.current.leftButton.isPressed && isInLane)
         {
-            if (mouseWorld.y >= currentLane + Constants.LaneHeight / 2) targetY = currentLane + Constants.LaneHeight / 2;
-            else if (mouseWorld.y <= currentLane - Constants.LaneHeight / 2) targetY = currentLane - Constants.LaneHeight / 2;
-            else targetY = mouseWorld.y;
-        }
-        else
-        {
-            targetY = mouseWorld.y;
+            targetY = Mathf.Clamp(
+                targetY,
+                currentLane - Constants.LaneHeight / 2,
+                currentLane + Constants.LaneHeight / 2
+            );
         }
 
 

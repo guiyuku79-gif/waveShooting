@@ -44,7 +44,10 @@ public class EnemyMedium : Medium
         }
         else
         {
-            if (waveIds.IndexOf(nextEnemyWaveList[0].id) == -1) newIds.Add(nextEnemyWaveList[0].id);
+            if (!waveIds.Contains(nextEnemyWaveList[0].id))
+            {
+                newIds.Add(nextEnemyWaveList[0].id);
+            }
             LeftWaveMove(true, nextEnemyWaveList[0].displacement, nextEnemyWaveList[0].id);
 
             nextEnemyWaveList.RemoveAt(0);

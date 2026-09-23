@@ -23,7 +23,7 @@ public class Medium
     Dictionary<int, float> priviousWavePowers;
 
 
-    public Medium(Color32 color,float laneY)
+    public Medium(Color32 color, float laneY)
     {
         this.division = Constants.Division;
         this.width = Constants.Width;
@@ -71,12 +71,18 @@ public class Medium
                 originalPowerSum += Math.Abs(wavePowers[i]);
                 changedPowerSum += Math.Abs(wavePowers[i] + opposite.wavePowers[i]);
             }
+            float powerRatio = changedPowerSum / originalPowerSum;
+            newWavePowers.Add(ids, powerRatio);
 
-            newWavePowers.Add(ids, changedPowerSum / originalPowerSum);
+            if (!priviousWavePowers.TryGetValue(ids, out float previousRatio))
+            {
+                continue;
+            }
 
-            if (!priviousWavePowers.ContainsKey(ids)) continue;
-
-            if (changedPowerSum / originalPowerSum <= 0.4f && priviousWavePowers[ids] <= changedPowerSum / originalPowerSum) DestructiveInterference(ids, opposite);
+            if (powerRatio <= 0.4f && previousRatio <= powerRatio)
+            {
+                DestructiveInterference(ids, opposite);
+            }
 
         }
 

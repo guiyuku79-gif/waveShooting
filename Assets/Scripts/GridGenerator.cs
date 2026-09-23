@@ -10,9 +10,10 @@ public class GridGenerator : MonoBehaviour
 
     void Start()
     {
-        MakeGrid(4.5f);
-        MakeGrid(0f);
-        MakeGrid(-4.5f);
+        foreach (float laneY in Constants.laneYs)
+        {
+            MakeGrid(laneY);
+        }
     }
 
     void MakeGrid(float laneY)
@@ -51,7 +52,7 @@ public class GridGenerator : MonoBehaviour
         line.startWidth = 0.05f;
         line.endWidth = 0.05f;
 
-        line.startColor = new Color32(255, 255, 255, 60);
-        line.endColor = new Color32(255, 255, 255, 60);
+        line.startColor = new Color32(255, 255, 255, 20);
+        line.endColor = new Color32(255, 255, 255, 20);
     }
 }

@@ -10,20 +10,13 @@ public class LaneGenerator : MonoBehaviour
     private List<GameObject> lanes = new List<GameObject>();
     void Start()
     {
-        GameObject gameObject1 = Instantiate(lineSample);
-        gameObject1.GetComponent<LineSample>().Init(4.5f, player);
-        lanes.Add(gameObject1);
-
-        GameObject gameObject2 = Instantiate(lineSample);
-        gameObject2.GetComponent<LineSample>().Init(0f, player);
-        lanes.Add(gameObject2);
-
-        GameObject gameObject3 = Instantiate(lineSample);
-        gameObject3.GetComponent<LineSample>().Init(-4.5f, player);
-        lanes.Add(gameObject3);
-
+        foreach (float laneY in Constants.laneYs)
+        {
+            GameObject gameObject1 = Instantiate(lineSample);
+            gameObject1.GetComponent<LineSample>().Init(laneY, player);
+            lanes.Add(gameObject1);
+        }
     }
-
 
     void Update()
     {
