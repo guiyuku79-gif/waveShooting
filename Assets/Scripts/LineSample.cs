@@ -5,7 +5,7 @@ using System;
 
 public class LineSample : MonoBehaviour
 {
-    [SerializeField] GameObject Player;
+    GameObject Player;
 
     [SerializeField] GameObject waveLendererObject;
 
@@ -14,7 +14,6 @@ public class LineSample : MonoBehaviour
     private float moveInterval;
     private float deltaTimeCount;
 
-    private float laneY;
 
     private Dictionary<int, GameObject> playerWaves = new Dictionary<int, GameObject>();
     private Dictionary<int, GameObject> enemyWaves = new Dictionary<int, GameObject>();
@@ -26,19 +25,15 @@ public class LineSample : MonoBehaviour
 
     void Start()
     {
-        Init(1f);
     }
 
-    public void Init(float laneY)
+    public void Init(float laneY, GameObject player)
     {
-        this.laneY = laneY;
-
+        this.Player = player;
         playerMedium = new PlayerMedium(new Color32(255, 0, 0, 122), laneY);
         enemyMedium = new EnemyMedium(new Color32(0, 255, 0, 122), laneY);
 
         deltaTimeCount = 0f;
-
-
 
         originalMoveInterval = 1 / (Constants.Division / Constants.Width * Constants.WaveSpeed);
     }
@@ -64,17 +59,24 @@ public class LineSample : MonoBehaviour
             MakeNewWave(newIds2, enemyMedium, playerMedium, enemyWaves);
         }
 
-        //仮
-        if (Keyboard.current.aKey.wasPressedThisFrame)
-        {
-            enemyMedium.MakeSinWave(4, 2, 1.5f);
-        }
+
     }
 
     private void MoveWave()
     {
-        List<int> newIds = playerMedium.WaveMove(Mouse.current.leftButton.isPressed, Player.transform.position.y);
-        MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
+        List<int> newIds;
+        if (playerMedium.laneY - Constants.LaneHeight / 2 <= Player.transform.position.y
+            && playerMedium.laneY + Constants.LaneHeight / 2 >= Player.transform.position.y)
+        {
+            newIds = playerMedium.WaveMove(Mouse.current.leftButton.isPressed, Player.transform.position.y - playerMedium.laneY);
+            MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
+        }
+        else
+        {
+            newIds = playerMedium.WaveMove(false, 0);
+            MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
+        }
+
 
         newIds = enemyMedium.WaveMove();
         MakeNewWave(newIds, enemyMedium, playerMedium, enemyWaves);
