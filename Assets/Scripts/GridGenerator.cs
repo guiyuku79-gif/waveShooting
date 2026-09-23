@@ -51,7 +51,7 @@ public class GridGenerator : MonoBehaviour
         line.startWidth = 0.05f;
         line.endWidth = 0.05f;
 
-        line.startColor = new Color32(255, 255, 255, 100);
-        line.endColor = new Color32(255, 255, 255, 100);
+        line.startColor = new Color32(255, 255, 255, 60);
+        line.endColor = new Color32(255, 255, 255, 60);
     }
 }
