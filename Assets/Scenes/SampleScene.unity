@@ -281,7 +281,6 @@ GameObject:
   m_Component:
   - component: {fileID: 484412722}
   - component: {fileID: 484412721}
-  - component: {fileID: 484412723}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -357,29 +356,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 484412720}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -5, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 417952611}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1215520438}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
---- !u!114 &484412723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 484412720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92a7eb3f4c5b7054fa3db6d82e9c0ff3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  maxSpeed: 5
-  smoothTime: 0.01
-  FuelImage: {fileID: 1233288915}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -749,6 +733,54 @@ MonoBehaviour:
   width: 12
   height: 4
   gridSize: 1
+--- !u!1 &1215520436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1215520438}
+  - component: {fileID: 1215520437}
+  m_Layer: 0
+  m_Name: PlayerPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1215520437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215520436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92a7eb3f4c5b7054fa3db6d82e9c0ff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  maxSpeed: 5
+  smoothTime: 0.1
+  FuelImage: {fileID: 1233288915}
+--- !u!4 &1215520438
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215520436}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 484412722}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1233288913
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,7 +885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a1d0402e6e2a4648ad6564e04be45e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaneGenerator
-  player: {fileID: 484412720}
+  player: {fileID: 1215520436}
   lineSample: {fileID: 6402002834419146960, guid: 8f7145edab858af428c9ac3c0a7421cc, type: 3}
 --- !u!4 &1517922213
 Transform:
@@ -969,8 +1001,8 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 1855823667}
-  - {fileID: 484412722}
   - {fileID: 74140048}
   - {fileID: 671333332}
   - {fileID: 1517922213}
   - {fileID: 559335114}
+  - {fileID: 1215520438}
