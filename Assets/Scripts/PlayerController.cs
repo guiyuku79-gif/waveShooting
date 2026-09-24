@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     //波の残量についての変数
     public float FuelRate { get; private set; }
 
-    private float fuelConsumeSpeed = 0.2f;
+    private float fuelConsumeSpeed = 0.02f;
     private float fuelChargeSpeed = 0.4f;
 
     void Start()

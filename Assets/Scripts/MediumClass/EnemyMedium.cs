@@ -12,7 +12,7 @@ public class EnemyMedium : Medium
     {
     }
 
-    List<(int id, float displacement)> nextEnemyWaveList = new();
+
 
     public void MakeSinWave(float waveLength, float amplitude, float wavecount)
     {

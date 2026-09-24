@@ -22,6 +22,8 @@ public class Medium
 
     Dictionary<int, float> priviousWavePowers;
 
+    public List<(int id, float displacement)> nextEnemyWaveList = new();
+
 
     public Medium(Color32 color, float laneY)
     {
@@ -124,40 +126,47 @@ public class Medium
         }
     }
 
-    public List<int> ReNewSeparetedWaveId()
+    public List<int> ReNewSeparetedWaveId(bool reverse = false)
     {
         List<int> newIds = new List<int>();
-
         List<int> uniqueIds = ToUniqueIds();
-        for (int i = 0; i < uniqueIds.Count; i++)
+        int step = reverse ? -1 : 1;
+
+        foreach (int id in uniqueIds)
         {
-            int index = waveIds.IndexOf(uniqueIds[i]);
+            int index = reverse
+                ? waveIds.LastIndexOf(id)
+                : waveIds.IndexOf(id);
 
             if (index == -1)
                 continue;
 
-            // 最初の連続した id を飛ばす
-            while (index < waveIds.Count && waveIds[index] == uniqueIds[i])
+            // 走査方向で最初の連続部分は、元の ID を残す
+            while (index >= 0 && index < waveIds.Count
+                   && waveIds[index] == id)
             {
-                index++;
+                index += step;
             }
 
-            // 最初の連続部分より後ろにある id を探す
-            while (index < waveIds.Count)
+            bool changed = false;
+
+            // その先にある同じ ID を、新しい ID にする
+            while (index >= 0 && index < waveIds.Count)
             {
-                if (waveIds[index] == uniqueIds[i])
+                if (waveIds[index] == id)
                 {
                     waveIds[index] = nextWaveIdForSeparate;
-
-                    if (!newIds.Contains(nextWaveIdForSeparate))
-                    {
-                        newIds.Add(nextWaveIdForSeparate);
-                    }
+                    changed = true;
                 }
 
-                index++;
+                index += step;
             }
-            if (waveIds.Contains(nextWaveIdForSeparate)) nextWaveIdForSeparate++;
+
+            if (changed)
+            {
+                newIds.Add(nextWaveIdForSeparate);
+                nextWaveIdForSeparate++;
+            }
         }
 
         return newIds;
