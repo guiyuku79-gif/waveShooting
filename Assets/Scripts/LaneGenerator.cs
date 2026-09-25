@@ -25,5 +25,9 @@ public class LaneGenerator : MonoBehaviour
         {
             lanes[1].GetComponent<LineSample>().enemyMedium.MakeSinWave(4, 2, 1.5f);
         }
+        if (Keyboard.current.sKey.wasPressedThisFrame)
+        {
+            lanes[1].GetComponent<LineSample>().enemyMedium.MakeTriangleWave(2, 1, 0.5f);
+        }
     }
 }

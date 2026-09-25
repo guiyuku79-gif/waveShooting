@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System;
 using UnityEngine;
 using System.Data.Common;
@@ -20,6 +19,23 @@ public class EnemyMedium : Medium
         for (int i = 0; i < division / width * waveLength * wavecount; i++)
         {
             nextEnemyWaveList.Add((nextWaveId, Mathf.Sin(2 * Mathf.PI * i * width / division / waveLength) * amplitude));
+        }
+        nextWaveId++;
+    }
+
+    private float TriangleDef(float x)
+    {
+        x = x % 4f;
+        if( x <= 1f) return x;
+        else if( x <= 3f) return 2-x;
+        else return x-4;
+    }
+
+    public void MakeTriangleWave(float waveLength, float amplitude, float waveCount)
+    {
+        for (int i = 0; i < division / width * waveLength * waveCount; i++)
+        {
+            nextEnemyWaveList.Add((nextWaveId, TriangleDef(4 * i * width / division / waveLength) * amplitude));
         }
         nextWaveId++;
     }

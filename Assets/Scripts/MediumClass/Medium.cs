@@ -81,7 +81,7 @@ public class Medium
                 continue;
             }
 
-            if (powerRatio <= 0.4f && previousRatio <= powerRatio)
+            if (previousRatio <= 0.4f && previousRatio <= powerRatio)
             {
                 DestructiveInterference(ids, opposite);
             }
