@@ -20,7 +20,7 @@ public class Medium
 
     public Color32 WaveColor { get; private set; }
 
-    Dictionary<int, float> priviousWavePowers;
+    public Dictionary<int, float> priviousWavePowers;
 
     public List<(int id, float displacement)> nextEnemyWaveList = new();
 
@@ -81,7 +81,7 @@ public class Medium
                 continue;
             }
 
-            if (previousRatio <= 0.4f && previousRatio <= powerRatio)
+            if (previousRatio <= 0.35f && previousRatio <= powerRatio)
             {
                 DestructiveInterference(ids, opposite);
             }
@@ -113,6 +113,7 @@ public class Medium
     }
     private void DestructiveInterference(int id, Medium opposite)
     {
+        Debug.Log(id);
         for (int i = 0; i < division; i++)
         {
             if (waveIds[i] == id)
@@ -121,7 +122,7 @@ public class Medium
                 wavePowers[i] = 0;
 
                 opposite.waveIds[i] = 0;
-                opposite.waveIds[i] = 0;
+                opposite.wavePowers[i] = 0;
             }
         }
     }

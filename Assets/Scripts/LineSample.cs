@@ -62,6 +62,21 @@ public class LineSample : MonoBehaviour
 
     }
 
+    void OnGUI()
+    {
+
+        string debugText = "";
+
+        foreach (var (id, ratio) in playerMedium.priviousWavePowers)
+        {
+            debugText += $"ID: {id}, Name: {ratio}\n";
+        }
+        GUI.Label(
+            new Rect(10, 10, 300, 100),
+            debugText
+        );
+    }
+
     private void MoveWave()
     {
         List<int> newIds;
@@ -127,7 +142,6 @@ public class LineSample : MonoBehaviour
 
             gameObject.transform.SetParent(transform);
             gameObject.GetComponent<OneWaveLenderer>().Init(medium, oppositeMedium, id);
-            Debug.Log(id);
             waves.Add(id, gameObject);
 
         }
@@ -155,5 +169,6 @@ public class LineSample : MonoBehaviour
             waves.Remove(key);
         }
     }
+
 
 }
