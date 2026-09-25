@@ -22,10 +22,8 @@ public class LineSample : MonoBehaviour
     [NonSerialized] public PlayerMedium playerMedium;
     [NonSerialized] public EnemyMedium enemyMedium;
 
+    public event Action WaveMoved;
 
-    void Start()
-    {
-    }
 
     public void Init(float laneY, GameObject player)
     {
@@ -57,6 +55,8 @@ public class LineSample : MonoBehaviour
             MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
             List<int> newIds2 = enemyMedium.ReNewSeparetedWaveId(reverse: true);
             MakeNewWave(newIds2, enemyMedium, playerMedium, enemyWaves);
+
+            WaveMoved?.Invoke();
         }
 
 

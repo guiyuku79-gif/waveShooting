@@ -887,6 +887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LaneGenerator
   player: {fileID: 1215520436}
   lineSample: {fileID: 6402002834419146960, guid: 8f7145edab858af428c9ac3c0a7421cc, type: 3}
+  enemy: {fileID: 3838668243508411313, guid: d5eb4018bcea2b84380b74ba12eaf7b1, type: 3}
 --- !u!4 &1517922213
 Transform:
   m_ObjectHideFlags: 0

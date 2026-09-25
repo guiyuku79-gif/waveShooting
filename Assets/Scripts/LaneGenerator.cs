@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class LaneGenerator : MonoBehaviour
@@ -6,6 +7,8 @@ public class LaneGenerator : MonoBehaviour
 
     [SerializeField] GameObject player;
     [SerializeField] GameObject lineSample;
+
+    [SerializeField] GameObject enemy;
 
     private List<GameObject> lanes = new List<GameObject>();
     void Start()
@@ -16,6 +19,9 @@ public class LaneGenerator : MonoBehaviour
             gameObject1.GetComponent<LineSample>().Init(laneY, player);
             lanes.Add(gameObject1);
         }
+
+        GameObject gameObject = Instantiate(enemy);
+        gameObject.GetComponent<EnemyController>().Init(lanes[1].GetComponent<LineSample>(), 1);
     }
 
     void Update()
