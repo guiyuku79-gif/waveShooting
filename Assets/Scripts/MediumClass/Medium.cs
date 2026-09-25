@@ -113,7 +113,6 @@ public class Medium
     }
     private void DestructiveInterference(int id, Medium opposite)
     {
-        Debug.Log(id);
         for (int i = 0; i < division; i++)
         {
             if (waveIds[i] == id)

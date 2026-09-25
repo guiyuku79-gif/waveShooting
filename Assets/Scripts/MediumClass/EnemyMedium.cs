@@ -26,9 +26,9 @@ public class EnemyMedium : Medium
     private float TriangleDef(float x)
     {
         x = x % 4f;
-        if( x <= 1f) return x;
-        else if( x <= 3f) return 2-x;
-        else return x-4;
+        if (x <= 1f) return x;
+        else if (x <= 3f) return 2 - x;
+        else return x - 4;
     }
 
     public void MakeTriangleWave(float waveLength, float amplitude, float waveCount)
@@ -60,11 +60,13 @@ public class EnemyMedium : Medium
         }
         else
         {
-            if (!waveIds.Contains(nextEnemyWaveList[0].id))
+            var nextWave = nextEnemyWaveList[0];
+
+            if (!waveIds.Contains(nextWave.id))
             {
-                newIds.Add(nextEnemyWaveList[0].id);
+                newIds.Add(nextWave.id);
             }
-            LeftWaveMove(true, nextEnemyWaveList[0].displacement, nextEnemyWaveList[0].id);
+            LeftWaveMove(true, nextWave.displacement, nextEnemyWaveList[0].id);
 
             nextEnemyWaveList.RemoveAt(0);
         }

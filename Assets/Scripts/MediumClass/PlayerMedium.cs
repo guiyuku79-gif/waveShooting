@@ -6,8 +6,8 @@ using System.Data.Common; //Debug.Log用
 
 public class PlayerMedium : Medium
 {
-    public PlayerMedium(Color32 color,float laneY)
-    : base(color,laneY)
+    public PlayerMedium(Color32 color, float laneY)
+    : base(color, laneY)
     {
     }
 
@@ -26,24 +26,15 @@ public class PlayerMedium : Medium
     public List<int> WaveMove(bool isPressed, float displacement)
     {
         List<int> newIds = new List<int>();
-        if (isPressed)
+
+        if (isPressed && !isShooting)
         {
-            if (!isShooting)
-            {
-                nextWaveId++;
-                newIds.Add(nextWaveId);
-
-                isShooting = true;
-            }
-
-            RightWaveMove(isPressed, displacement);
+            nextWaveId++;
+            newIds.Add(nextWaveId);
         }
-        else
-        {
-            if (isShooting) isShooting = false;
 
-            RightWaveMove(isPressed, 0);
-        }
+        isShooting = isPressed;
+        RightWaveMove(isPressed, isPressed ? displacement : 0);
 
         return newIds;
     }
