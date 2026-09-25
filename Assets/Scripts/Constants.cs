@@ -5,7 +5,9 @@ public static class Constants
     public const float Width = 12; //媒質の幅
     public const float WaveSpeed = 1f; //波の速さ
 
-    public const float LaneHeight = 4f;
+    public const float LaneHeight = 4f; //レーンの高さ
+
+    public const float ScreenHeight = 14f; //プレイヤーの動ける範囲
 
     public static readonly IReadOnlyList<float> laneYs = new float[]
     {

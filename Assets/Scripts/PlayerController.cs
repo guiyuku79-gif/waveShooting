@@ -55,6 +55,12 @@ public class PlayerController : MonoBehaviour
             );
         }
 
+        targetY = Mathf.Clamp(
+            targetY,
+            -Constants.ScreenHeight / 2,
+            Constants.ScreenHeight / 2
+        );
+
 
         float newY = Mathf.SmoothDamp(
             transform.position.y,
