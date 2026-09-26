@@ -11,8 +11,6 @@ public class EnemyMedium : Medium
     {
     }
 
-
-
     public void MakeSinWave(float waveLength, float amplitude, float wavecount)
     {
 
@@ -36,6 +34,15 @@ public class EnemyMedium : Medium
         for (int i = 0; i < division / width * waveLength * waveCount; i++)
         {
             nextEnemyWaveList.Add((nextWaveId, TriangleDef(4 * i * width / division / waveLength) * amplitude));
+        }
+        nextWaveId++;
+    }
+
+    public void MakeConstantWave(float waveLength, float amplitude)
+    {
+        for (int i = 0; i < division / width * waveLength; i++)
+        {
+            nextEnemyWaveList.Add((nextWaveId, amplitude));
         }
         nextWaveId++;
     }

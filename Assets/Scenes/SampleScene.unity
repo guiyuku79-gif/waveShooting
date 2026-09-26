@@ -905,6 +905,8 @@ MonoBehaviour:
   smoothTime: 0.1
   FuelImage: {fileID: 1233288915}
   pointText: {fileID: 588385797}
+  fuelRate: 0
+  canMove: 0
   point: 0
 --- !u!4 &1215520438
 Transform:
@@ -1163,7 +1165,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1855823666
 SpriteRenderer:
   serializedVersion: 3

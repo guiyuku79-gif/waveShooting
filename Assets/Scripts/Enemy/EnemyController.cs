@@ -26,7 +26,7 @@ public class EnemyController : MonoBehaviour
         //仮
         lineSample.enemyMedium.MakeTriangleWave(2, 1, 0.5f);
         lineSample.enemyMedium.MakeWait(2);
-        lineSample.enemyMedium.MakeTriangleWave(2, 1, 0.5f);
+        lineSample.enemyMedium.MakeConstantWave(2, 1);
     }
     private void OnWaveMoved()
     {
