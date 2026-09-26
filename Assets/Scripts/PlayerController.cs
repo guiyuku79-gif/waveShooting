@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     //波の残量についての変数
     public float fuelRate;
+    public bool canMove;
 
     private float fuelConsumeSpeed = 0.02f;
     private float fuelChargeSpeed = 0.4f;
@@ -25,8 +26,9 @@ public class PlayerController : MonoBehaviour
         transform.position = new Vector3(-Constants.Width / 2, 0, 0);
 
         fuelRate = 1.0f;
-
         point = 0;
+        canMove = true;
+
     }
 
     void Update()
@@ -39,6 +41,8 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
+        if (!canMove) return;
+
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
         float currentLane = 0f;
@@ -86,18 +90,45 @@ public class PlayerController : MonoBehaviour
         );
     }
 
+    public void Damage(float damage)
+    {
+        if (canMove)
+        {
+            fuelRate -= damage;
+            FuelImage.fillAmount = fuelRate;
+        }
+    }
+
+
+
     private void FuelChange()
     {
-        if (Mouse.current.leftButton.isPressed)
+        if (canMove)
         {
-            fuelRate -= fuelConsumeSpeed * Time.deltaTime;
-            if (fuelRate <= 0f) fuelRate = 0f;
+            if (Mouse.current.leftButton.isPressed)
+            {
+                fuelRate -= fuelConsumeSpeed * Time.deltaTime;
+            }
+            else
+            {
+                fuelRate += fuelChargeSpeed * Time.deltaTime;
+            }
+            fuelRate =  Mathf.Clamp01(fuelRate);
+
+            if (fuelRate <= 0f) canMove = false;
         }
         else
         {
             fuelRate += fuelChargeSpeed * Time.deltaTime;
-            if (fuelRate >= 1f) fuelRate = 1f;
+            FuelImage.fillAmount = fuelRate;
+            if (fuelRate >= 1f)
+            {
+                canMove = true;
+                fuelRate = 1f;
+            }
         }
+
         FuelImage.fillAmount = fuelRate;
+
     }
 }

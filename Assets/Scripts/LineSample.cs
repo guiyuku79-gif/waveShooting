@@ -179,7 +179,7 @@ public class LineSample : MonoBehaviour
         {
             if (enemyMedium.waveIds[0] != 0)
             {
-                Player.GetComponent<PlayerController>().fuelRate -= enemyMedium.wavePowers[0] * Constants.Width / Constants.Division;
+                Player.GetComponent<PlayerController>().Damage(enemyMedium.wavePowers[0] * Constants.Width / Constants.Division);
             }
         }
     }
