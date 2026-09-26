@@ -45,6 +45,7 @@ public class EnemyController : MonoBehaviour
             HPBar.fillAmount = hp / maxHp;
             if (hp <= 0)
             {
+                lineSample.enemyMedium.nextEnemyWaveList.Clear();
                 Destroy(gameObject);
             }
         }

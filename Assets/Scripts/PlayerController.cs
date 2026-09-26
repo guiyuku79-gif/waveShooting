@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     public float fuelRate;
     public bool canMove;
 
-    private float fuelConsumeSpeed = 0.02f;
+    private float fuelConsumeSpeed = 0.1f;
     private float fuelChargeSpeed = 0.4f;
 
     public float point;
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
             {
                 fuelRate += fuelChargeSpeed * Time.deltaTime;
             }
-            fuelRate =  Mathf.Clamp01(fuelRate);
+            fuelRate = Mathf.Clamp01(fuelRate);
 
             if (fuelRate <= 0f) canMove = false;
         }
