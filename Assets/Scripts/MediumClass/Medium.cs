@@ -56,8 +56,9 @@ public class Medium
         return idsSet;
     }
 
-    public void WavePowerCheck(Medium opposite)
+    public float WavePowerCheck(Medium opposite)
     {
+        float wavePowerSum = 0;
         List<int> idsSet = ToUniqueIds();
 
         //前回の減少率を記憶しておく
@@ -83,12 +84,14 @@ public class Medium
 
             if (previousRatio <= 0.35f && previousRatio <= powerRatio)
             {
-                DestructiveInterference(ids, opposite);
+                wavePowerSum = DestructiveInterference(ids, opposite);
             }
 
         }
 
         priviousWavePowers = newWavePowers;
+
+        return wavePowerSum;
     }
 
 
@@ -111,8 +114,9 @@ public class Medium
             }
         }
     }
-    private void DestructiveInterference(int id, Medium opposite)
+    private float DestructiveInterference(int id, Medium opposite)
     {
+        float wavePowerSum = 0;
         for (int i = 0; i < division; i++)
         {
             if (waveIds[i] == id)
@@ -122,8 +126,11 @@ public class Medium
 
                 opposite.waveIds[i] = 0;
                 opposite.wavePowers[i] = 0;
+
+                wavePowerSum += Constants.Width / Constants.Division;
             }
         }
+        return wavePowerSum;
     }
 
     public List<int> ReNewSeparetedWaveId(bool reverse = false)

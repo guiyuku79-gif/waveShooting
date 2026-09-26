@@ -126,8 +126,8 @@ public class LineSample : MonoBehaviour
 
     private void WavePowerCheck()
     {
-        playerMedium.WavePowerCheck(enemyMedium);
-        enemyMedium.WavePowerCheck(playerMedium);
+        Player.GetComponent<PlayerController>().point += playerMedium.WavePowerCheck(enemyMedium);
+        Player.GetComponent<PlayerController>().point += enemyMedium.WavePowerCheck(playerMedium);
 
         playerMedium.DestroyTooSmallWave();
         enemyMedium.DestroyTooSmallWave();

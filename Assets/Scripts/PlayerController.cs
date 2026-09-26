@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -7,6 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float smoothTime = 0.1f;
     [SerializeField] private Image FuelImage;
 
+    [SerializeField] private TextMeshProUGUI pointText;
+
     private float velocityY;
 
     //波の残量についての変数
@@ -15,17 +18,23 @@ public class PlayerController : MonoBehaviour
     private float fuelConsumeSpeed = 0.02f;
     private float fuelChargeSpeed = 0.4f;
 
+    public float point;
+
     void Start()
     {
         transform.position = new Vector3(-Constants.Width / 2, 0, 0);
 
         FuelRate = 1.0f;
+
+        point = 0;
     }
 
     void Update()
     {
         Move();
         FuelChange();
+
+        pointText.text = $"point: {(int)(point * 10)}";
     }
 
     private void Move()
