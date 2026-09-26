@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     private float velocityY;
 
     //波の残量についての変数
-    public float FuelRate { get; private set; }
+    public float fuelRate;
 
     private float fuelConsumeSpeed = 0.02f;
     private float fuelChargeSpeed = 0.4f;
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = new Vector3(-Constants.Width / 2, 0, 0);
 
-        FuelRate = 1.0f;
+        fuelRate = 1.0f;
 
         point = 0;
     }
@@ -90,14 +90,14 @@ public class PlayerController : MonoBehaviour
     {
         if (Mouse.current.leftButton.isPressed)
         {
-            FuelRate -= fuelConsumeSpeed * Time.deltaTime;
-            if (FuelRate <= 0f) FuelRate = 0f;
+            fuelRate -= fuelConsumeSpeed * Time.deltaTime;
+            if (fuelRate <= 0f) fuelRate = 0f;
         }
         else
         {
-            FuelRate += fuelChargeSpeed * Time.deltaTime;
-            if (FuelRate >= 1f) FuelRate = 1f;
+            fuelRate += fuelChargeSpeed * Time.deltaTime;
+            if (fuelRate >= 1f) fuelRate = 1f;
         }
-        FuelImage.fillAmount = FuelRate;
+        FuelImage.fillAmount = fuelRate;
     }
 }

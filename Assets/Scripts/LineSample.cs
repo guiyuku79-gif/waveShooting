@@ -56,6 +56,8 @@ public class LineSample : MonoBehaviour
             List<int> newIds2 = enemyMedium.ReNewSeparetedWaveId(reverse: true);
             MakeNewWave(newIds2, enemyMedium, playerMedium, enemyWaves);
 
+            PlayerDamage();
+
             WaveMoved?.Invoke();
         }
 
@@ -82,7 +84,7 @@ public class LineSample : MonoBehaviour
         List<int> newIds;
         if (playerMedium.laneY - Constants.LaneHeight / 2 <= Player.transform.position.y
             && playerMedium.laneY + Constants.LaneHeight / 2 >= Player.transform.position.y
-            && Player.GetComponent<PlayerController>().FuelRate >= 0.01f)
+            && Player.GetComponent<PlayerController>().fuelRate >= 0.01f)
         {
             newIds = playerMedium.WaveMove(Mouse.current.leftButton.isPressed, Player.transform.position.y - playerMedium.laneY);
             MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
@@ -170,5 +172,15 @@ public class LineSample : MonoBehaviour
         }
     }
 
-
+    private void PlayerDamage()
+    {
+        if (playerMedium.laneY - Constants.LaneHeight / 2 <= Player.transform.position.y &&
+            Player.transform.position.y <= playerMedium.laneY + Constants.LaneHeight / 2)
+        {
+            if (enemyMedium.waveIds[0] != 0)
+            {
+                Player.GetComponent<PlayerController>().fuelRate -= enemyMedium.wavePowers[0] * Constants.Width / Constants.Division;
+            }
+        }
+    }
 }
