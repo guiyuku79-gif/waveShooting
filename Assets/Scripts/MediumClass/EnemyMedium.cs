@@ -40,6 +40,14 @@ public class EnemyMedium : Medium
         nextWaveId++;
     }
 
+    public void MakeWait(float Length)
+    {
+        for (int i = 0; i < division / width * Length; i++)
+        {
+            nextEnemyWaveList.Add((0, 0));
+        }
+    }
+
     public void LeftWaveMove(bool isPressed, float wavePower, int id)
     {
         for (int i = 0; i < division - 1; i++)
@@ -62,11 +70,19 @@ public class EnemyMedium : Medium
         {
             var nextWave = nextEnemyWaveList[0];
 
-            if (!waveIds.Contains(nextWave.id))
+            if (nextWave.id == 0)
             {
-                newIds.Add(nextWave.id);
+                LeftWaveMove(false, 0, -1);
             }
-            LeftWaveMove(true, nextWave.displacement, nextEnemyWaveList[0].id);
+            else
+            {
+                if (!waveIds.Contains(nextWave.id))
+                {
+                    newIds.Add(nextWave.id);
+                }
+                LeftWaveMove(true, nextWave.displacement, nextEnemyWaveList[0].id);
+
+            }
 
             nextEnemyWaveList.RemoveAt(0);
         }
