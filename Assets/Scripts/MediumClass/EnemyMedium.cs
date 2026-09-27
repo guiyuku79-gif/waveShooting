@@ -56,6 +56,12 @@ public class EnemyMedium : Medium
         }
     }
 
+    public void SetPattern(EnemyData data)
+    {
+        nextEnemyWaveList = data.CreateWaveList();
+        enemyActionId = 0;
+    }
+
     public void LeftWaveMove(bool isPressed, float wavePower, int id)
     {
         for (int i = 0; i < division - 1; i++)

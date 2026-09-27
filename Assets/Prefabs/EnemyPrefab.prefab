@@ -182,6 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   HPBar: {fileID: 4982876100624317757}
+  data1: {fileID: 11400000, guid: 9a53526856c95ba489736ee3eec574f7, type: 2}
 --- !u!1 &6474025864070975288
 GameObject:
   m_ObjectHideFlags: 0
