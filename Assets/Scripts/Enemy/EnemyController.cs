@@ -12,11 +12,11 @@ public class EnemyController : MonoBehaviour
     float priviousWavePower;
     float priviousWaveDuration;
 
-    public void Init(LineSample lineSample, int lane)
+    public void Init(LineSample lineSample)
     {
         this.lineSample = lineSample;
         hp = maxHp;
-        transform.position = new Vector3(Constants.Width / 2, Constants.laneYs[lane], 0);
+        transform.position = new Vector3(Constants.Width / 2, lineSample.playerMedium.laneY, 0);
 
         this.lineSample.WaveMoved += OnWaveMoved;
 

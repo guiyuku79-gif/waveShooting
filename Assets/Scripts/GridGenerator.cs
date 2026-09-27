@@ -8,6 +8,18 @@ public class GridGenerator : MonoBehaviour
     [SerializeField] float height = 4;
     [SerializeField] float gridSize = 1;
 
+    //シングルトン
+    public static GridGenerator Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     void Start()
     {
         foreach (float laneY in Constants.laneYs)
