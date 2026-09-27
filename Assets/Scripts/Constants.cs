@@ -14,10 +14,11 @@ public static class Constants
     4.5f,0f,-4.5f
     };
 
-    public enum WaveType
+    public enum EnemyAction
     {
-        Player,
-        Enemy
+        Wait,
+        Wave,
+        WaveStart
     }
 
 }

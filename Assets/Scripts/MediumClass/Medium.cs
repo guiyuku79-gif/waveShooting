@@ -22,7 +22,7 @@ public class Medium
 
     public Dictionary<int, float> priviousWavePowers;
 
-    public List<(string action, float displacement)> nextEnemyWaveList = new();
+    public List<(Constants.EnemyAction action, float displacement)> nextEnemyWaveList = new();
 
 
     public Medium(Color32 color, float laneY)

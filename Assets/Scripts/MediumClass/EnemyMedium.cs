@@ -15,10 +15,10 @@ public class EnemyMedium : Medium
 
     public void MakeSinWave(float waveLength, float amplitude, float wavecount)
     {
-        nextEnemyWaveList.Add(("waveStart", 0));
+        nextEnemyWaveList.Add((Constants.EnemyAction.WaveStart, 0));
         for (int i = 0; i < division / width * waveLength * wavecount; i++)
         {
-            nextEnemyWaveList.Add(("wave", Mathf.Sin(2 * Mathf.PI * i * width / division / waveLength) * amplitude));
+            nextEnemyWaveList.Add((Constants.EnemyAction.Wave, Mathf.Sin(2 * Mathf.PI * i * width / division / waveLength) * amplitude));
         }
     }
 
@@ -32,27 +32,27 @@ public class EnemyMedium : Medium
 
     public void MakeTriangleWave(float waveLength, float amplitude, float waveCount)
     {
-        nextEnemyWaveList.Add(("waveStart", 0));
+        nextEnemyWaveList.Add((Constants.EnemyAction.WaveStart, 0));
         for (int i = 0; i < division / width * waveLength * waveCount; i++)
         {
-            nextEnemyWaveList.Add(("wave", TriangleDef(4 * i * width / division / waveLength) * amplitude));
+            nextEnemyWaveList.Add((Constants.EnemyAction.Wave, TriangleDef(4 * i * width / division / waveLength) * amplitude));
         }
     }
 
     public void MakeConstantWave(float waveLength, float amplitude)
     {
-        nextEnemyWaveList.Add(("waveStart", 0));
+        nextEnemyWaveList.Add((Constants.EnemyAction.WaveStart, 0));
         for (int i = 0; i < division / width * waveLength; i++)
         {
-            nextEnemyWaveList.Add(("wave", amplitude));
+            nextEnemyWaveList.Add((Constants.EnemyAction.Wave, amplitude));
         }
     }
 
-    public void MakeWait(float Length)
+    public void MakeWait(float waveLength)
     {
-        for (int i = 0; i < division / width * Length; i++)
+        for (int i = 0; i < division / width * waveLength; i++)
         {
-            nextEnemyWaveList.Add(("wait", 0));
+            nextEnemyWaveList.Add((Constants.EnemyAction.Wait, 0));
         }
     }
 
@@ -80,17 +80,17 @@ public class EnemyMedium : Medium
 
             switch (nextWave.action)
             {
-                case "wait":
+                case Constants.EnemyAction.Wait:
                     LeftWaveMove(false, 0, -1);
                     break;
-                case "waveStart":
+                case Constants.EnemyAction.WaveStart:
                     nextWaveId++;
                     newIds.Add(nextWaveId);
 
                     enemyActionId++;
                     LeftWaveMove(true, nextEnemyWaveList[enemyActionId].displacement, nextWaveId);
                     break;
-                case "wave":
+                case Constants.EnemyAction.Wave:
                     LeftWaveMove(true, nextWave.displacement, nextWaveId);
                     break;
             }
