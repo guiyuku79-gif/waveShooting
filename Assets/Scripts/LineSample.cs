@@ -157,8 +157,7 @@ public class LineSample : MonoBehaviour
             if (medium.waveIds.IndexOf(pair.Key) == -1)
             {
                 //出している最中の波は消さない
-                if (medium is PlayerMedium && pair.Key == medium.nextWaveId) continue;
-                if (medium is EnemyMedium && medium.nextEnemyWaveList.Count != 0 && pair.Key == medium.nextEnemyWaveList[0].id) continue;
+                if (pair.Key == medium.nextWaveId) continue;
 
                 Destroy(pair.Value);
                 keysToRemove.Add(pair.Key);

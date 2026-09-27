@@ -11,14 +11,15 @@ public class EnemyMedium : Medium
     {
     }
 
+    private int enemyActionId = 0;
+
     public void MakeSinWave(float waveLength, float amplitude, float wavecount)
     {
-
+        nextEnemyWaveList.Add(("waveStart", 0));
         for (int i = 0; i < division / width * waveLength * wavecount; i++)
         {
-            nextEnemyWaveList.Add((nextWaveId, Mathf.Sin(2 * Mathf.PI * i * width / division / waveLength) * amplitude));
+            nextEnemyWaveList.Add(("wave", Mathf.Sin(2 * Mathf.PI * i * width / division / waveLength) * amplitude));
         }
-        nextWaveId++;
     }
 
     private float TriangleDef(float x)
@@ -31,27 +32,27 @@ public class EnemyMedium : Medium
 
     public void MakeTriangleWave(float waveLength, float amplitude, float waveCount)
     {
+        nextEnemyWaveList.Add(("waveStart", 0));
         for (int i = 0; i < division / width * waveLength * waveCount; i++)
         {
-            nextEnemyWaveList.Add((nextWaveId, TriangleDef(4 * i * width / division / waveLength) * amplitude));
+            nextEnemyWaveList.Add(("wave", TriangleDef(4 * i * width / division / waveLength) * amplitude));
         }
-        nextWaveId++;
     }
 
     public void MakeConstantWave(float waveLength, float amplitude)
     {
+        nextEnemyWaveList.Add(("waveStart", 0));
         for (int i = 0; i < division / width * waveLength; i++)
         {
-            nextEnemyWaveList.Add((nextWaveId, amplitude));
+            nextEnemyWaveList.Add(("wave", amplitude));
         }
-        nextWaveId++;
     }
 
     public void MakeWait(float Length)
     {
         for (int i = 0; i < division / width * Length; i++)
         {
-            nextEnemyWaveList.Add((0, 0));
+            nextEnemyWaveList.Add(("wait", 0));
         }
     }
 
@@ -75,23 +76,27 @@ public class EnemyMedium : Medium
         }
         else
         {
-            var nextWave = nextEnemyWaveList[0];
+            var nextWave = nextEnemyWaveList[enemyActionId];
 
-            if (nextWave.id == 0)
+            switch (nextWave.action)
             {
-                LeftWaveMove(false, 0, -1);
-            }
-            else
-            {
-                if (!waveIds.Contains(nextWave.id))
-                {
-                    newIds.Add(nextWave.id);
-                }
-                LeftWaveMove(true, nextWave.displacement, nextEnemyWaveList[0].id);
+                case "wait":
+                    LeftWaveMove(false, 0, -1);
+                    break;
+                case "waveStart":
+                    nextWaveId++;
+                    newIds.Add(nextWaveId);
 
+                    enemyActionId++;
+                    LeftWaveMove(true, nextEnemyWaveList[enemyActionId].displacement, nextWaveId);
+                    break;
+                case "wave":
+                    LeftWaveMove(true, nextWave.displacement, nextWaveId);
+                    break;
             }
 
-            nextEnemyWaveList.RemoveAt(0);
+            enemyActionId++;
+            if (enemyActionId >= nextEnemyWaveList.Count) enemyActionId = 0;
         }
 
         return newIds;
