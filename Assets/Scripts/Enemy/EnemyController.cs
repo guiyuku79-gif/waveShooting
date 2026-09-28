@@ -11,8 +11,7 @@ public class EnemyController : MonoBehaviour
     float maxHp = 1f;
     float hp;
 
-    float priviousWavePower;
-    float priviousWaveDuration;
+    int priviousWavePower;
 
     public event System.Action Defeated;
     private bool isDefeated;
@@ -25,7 +24,6 @@ public class EnemyController : MonoBehaviour
         this.lineSample.WaveMoved += OnWaveMoved;
 
         this.priviousWavePower = 0;
-        this.priviousWaveDuration = 0;
 
 
         //仮
@@ -39,21 +37,34 @@ public class EnemyController : MonoBehaviour
     {
         if (isDefeated) return;
 
-        float currentWavePower = lineSample.playerMedium.waveIds[^1];
+        float currentWavePower = lineSample.playerMedium.wavePowers[^1];
         if (currentWavePower != 0)
         {
-            if (priviousWavePower * currentWavePower <= 0)
+            if (priviousWavePower == 0)
             {
-                priviousWaveDuration = 0;
+                hp -= 0.5f;
+                priviousWavePower = currentWavePower > 0 ? 1 : -1;
             }
-            priviousWavePower = currentWavePower;
-            priviousWaveDuration += Constants.Width / Constants.Division;
+            else
+            {
+                if (currentWavePower > 1f && priviousWavePower == -1)
+                {
+                    hp -= 0.5f;
+                    priviousWavePower = -1;
+                }
+                else if (currentWavePower < -1f && priviousWavePower == 1)
+                {
+                    hp -= 0.5f;
+                    priviousWavePower = 1;
+                }
+            }
 
-            hp -= Mathf.Abs(currentWavePower) / (0.5f + priviousWaveDuration) * Constants.Width / Constants.Division;
+            hp -= Constants.Width / Constants.Division;
 
             HPBar.fillAmount = hp / maxHp;
             if (hp <= 0)
             {
+                isDefeated = true;
                 lineSample.enemyMedium.nextEnemyWaveList.Clear();
 
                 Defeated?.Invoke();
