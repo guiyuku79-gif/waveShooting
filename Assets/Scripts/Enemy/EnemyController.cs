@@ -50,12 +50,12 @@ public class EnemyController : MonoBehaviour
                 if (currentWavePower > 1f && previousWaveSign == -1)
                 {
                     hp -= 0.5f;
-                    previousWaveSign = -1;
+                    previousWaveSign = 1;
                 }
                 else if (currentWavePower < -1f && previousWaveSign == 1)
                 {
                     hp -= 0.5f;
-                    previousWaveSign = 1;
+                    previousWaveSign = -1;
                 }
             }
 

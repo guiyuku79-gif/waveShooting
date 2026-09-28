@@ -34,6 +34,7 @@ public class LineSample : MonoBehaviour
         deltaTimeCount = 0f;
 
         originalMoveInterval = 1 / (Constants.Division / Constants.Width * Constants.WaveSpeed);
+        moveInterval = originalMoveInterval;
     }
 
     void Update()
@@ -140,7 +141,7 @@ public class LineSample : MonoBehaviour
     {
         foreach (int id in ids)
         {
-            if (waves.ContainsKey(id)) return;
+            if (waves.ContainsKey(id)) continue;
             GameObject gameObject = Instantiate(waveRendererPrefab);
 
             gameObject.transform.SetParent(transform);

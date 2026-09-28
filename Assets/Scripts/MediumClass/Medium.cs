@@ -74,7 +74,10 @@ public class Medium
                 originalPowerSum += Math.Abs(wavePowers[i]);
                 changedPowerSum += Math.Abs(wavePowers[i] + opposite.wavePowers[i]);
             }
-            float powerRatio = changedPowerSum / originalPowerSum;
+
+            float powerRatio = 0f;
+            if (originalPowerSum != 0) powerRatio = changedPowerSum / originalPowerSum;
+
             newWavePowers.Add(ids, powerRatio);
 
             if (!previousWaveSigns.TryGetValue(ids, out float previousRatio))
@@ -84,7 +87,7 @@ public class Medium
 
             if (previousRatio <= 0.35f && previousRatio <= powerRatio)
             {
-                wavePowerSum = DestructiveInterference(ids, opposite);
+                wavePowerSum += DestructiveInterference(ids, opposite);
             }
 
         }
