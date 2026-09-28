@@ -75,8 +75,9 @@ public class Medium
                 changedPowerSum += Math.Abs(wavePowers[i] + opposite.wavePowers[i]);
             }
 
-            float powerRatio = 0f;
+            float powerRatio = 1f;
             if (originalPowerSum != 0) powerRatio = changedPowerSum / originalPowerSum;
+            // float powerRatio = changedPowerSum / originalPowerSum;
 
             newWavePowers.Add(ids, powerRatio);
 
