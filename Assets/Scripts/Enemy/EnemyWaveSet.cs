@@ -55,11 +55,14 @@ public class EnemyWaveSet : MonoBehaviour
                     {
                         GameObject obj = Instantiate(enemy);
 
+                        EnemyController controller = obj.GetComponent<EnemyController>();
+
+                        GetComponent<ClearManager>().RegisterEnemy(controller);
+
                         LineSample lane = LaneGenerator.Instance
                             .lanes[action.laneYId].GetComponent<LineSample>();
 
-                        obj.GetComponent<EnemyController>()
-                            .Init(lane, data1[action.waveId]);
+                        controller.Init(lane, data1[action.waveId]);
 
                         break;
                     }
@@ -69,5 +72,15 @@ public class EnemyWaveSet : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public int CountSpawn()
+    {
+        int sum = 0;
+        foreach (var action in waveSetActions)
+        {
+            if (action.type == WaveSetActionType.Spawn) sum++;
+        }
+        return sum;
     }
 }

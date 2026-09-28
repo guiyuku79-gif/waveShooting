@@ -14,6 +14,9 @@ public class EnemyController : MonoBehaviour
     float priviousWavePower;
     float priviousWaveDuration;
 
+    public event System.Action Defeated;
+    private bool isDefeated;
+
     public void Init(LineSample lineSample, EnemyData enemyData)
     {
         data = enemyData;
@@ -34,6 +37,8 @@ public class EnemyController : MonoBehaviour
     }
     private void OnWaveMoved()
     {
+        if (isDefeated) return;
+
         float currentWavePower = lineSample.playerMedium.waveIds[^1];
         if (currentWavePower != 0)
         {
@@ -50,6 +55,8 @@ public class EnemyController : MonoBehaviour
             if (hp <= 0)
             {
                 lineSample.enemyMedium.nextEnemyWaveList.Clear();
+
+                Defeated?.Invoke();
                 Destroy(gameObject);
             }
         }

@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public bool canMove;
 
     private float fuelConsumeSpeed = 0.1f;
-    private float fuelChargeSpeed = 0.4f;
+    private float fuelChargeSpeed = 0.2f;
 
     public float point;
 
