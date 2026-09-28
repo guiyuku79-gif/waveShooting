@@ -908,6 +908,9 @@ MonoBehaviour:
   fuelRate: 0
   canMove: 0
   point: 0
+  playerSprite: {fileID: 484412721}
+  blinkCycle: 1
+  minAlpha: 0.2
 --- !u!4 &1215520438
 Transform:
   m_ObjectHideFlags: 0

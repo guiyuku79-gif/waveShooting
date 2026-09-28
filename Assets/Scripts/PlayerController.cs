@@ -21,6 +21,13 @@ public class PlayerController : MonoBehaviour
 
     public float point;
 
+    //点滅処理用
+    [SerializeField] private SpriteRenderer playerSprite;
+    [SerializeField, Min(0.01f)] private float blinkCycle = 1f;
+    [SerializeField, Range(0f, 1f)] private float minAlpha = 0.2f;
+
+    private float blinkTimer;
+
     void Start()
     {
         transform.position = new Vector3(-Constants.Width / 2, 0, 0);
@@ -35,6 +42,7 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         FuelChange();
+        UpdateBlink();
 
         pointText.text = $"point: {(int)(point * 10)}";
     }
@@ -99,8 +107,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-
     private void FuelChange()
     {
         if (canMove)
@@ -130,5 +136,28 @@ public class PlayerController : MonoBehaviour
 
         fuelImage.fillAmount = fuelRate;
 
+    }
+
+    private void UpdateBlink()
+    {
+        playerSprite.enabled = true;
+        Color color = playerSprite.color;
+
+        if (canMove)
+        {
+            blinkTimer = 0f;
+            color.a = 1f;
+        }
+        else
+        {
+            blinkTimer = (blinkTimer + Time.deltaTime) % blinkCycle;
+
+            float phase = blinkTimer / blinkCycle;
+            float opacity = (Mathf.Cos(phase * Mathf.PI * 2f) + 1f) / 2f;
+
+            color.a = Mathf.Lerp(minAlpha, 1f, opacity);
+        }
+
+        playerSprite.color = color;
     }
 }
