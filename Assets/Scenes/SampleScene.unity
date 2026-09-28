@@ -903,7 +903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   maxSpeed: 10
   smoothTime: 0.1
-  FuelImage: {fileID: 1233288915}
+  fuelImage: {fileID: 1233288915}
   pointText: {fileID: 588385797}
   fuelRate: 0
   canMove: 0

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36b38cc85b02cea4fb6e6d3328ecb655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LineSample
-  waveLendererObject: {fileID: 2186664634343004805, guid: 22c8b3c4383b4064fa1688d5e9f272f9, type: 3}
+  waveRendererPrefab: {fileID: 2186664634343004805, guid: 22c8b3c4383b4064fa1688d5e9f272f9, type: 3}
 --- !u!120 &6650361697000329848
 LineRenderer:
   serializedVersion: 3

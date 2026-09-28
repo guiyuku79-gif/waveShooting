@@ -11,7 +11,7 @@ public class EnemyController : MonoBehaviour
     float maxHp = 1f;
     float hp;
 
-    int priviousWavePower;
+    int previousWaveSign;
 
     public event System.Action Defeated;
     private bool isDefeated;
@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour
         transform.position = new Vector3(Constants.Width / 2, lineSample.playerMedium.laneY, 0);
         this.lineSample.WaveMoved += OnWaveMoved;
 
-        this.priviousWavePower = 0;
+        this.previousWaveSign = 0;
 
 
         //仮
@@ -40,22 +40,22 @@ public class EnemyController : MonoBehaviour
         float currentWavePower = lineSample.playerMedium.wavePowers[^1];
         if (currentWavePower != 0)
         {
-            if (priviousWavePower == 0)
+            if (previousWaveSign == 0)
             {
                 hp -= 0.5f;
-                priviousWavePower = currentWavePower > 0 ? 1 : -1;
+                previousWaveSign = currentWavePower > 0 ? 1 : -1;
             }
             else
             {
-                if (currentWavePower > 1f && priviousWavePower == -1)
+                if (currentWavePower > 1f && previousWaveSign == -1)
                 {
                     hp -= 0.5f;
-                    priviousWavePower = -1;
+                    previousWaveSign = -1;
                 }
-                else if (currentWavePower < -1f && priviousWavePower == 1)
+                else if (currentWavePower < -1f && previousWaveSign == 1)
                 {
                     hp -= 0.5f;
-                    priviousWavePower = 1;
+                    previousWaveSign = 1;
                 }
             }
 

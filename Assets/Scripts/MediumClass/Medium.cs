@@ -20,7 +20,7 @@ public class Medium
 
     public Color32 WaveColor { get; private set; }
 
-    public Dictionary<int, float> priviousWavePowers;
+    public Dictionary<int, float> previousWaveSigns;
 
     public List<(Constants.EnemyAction action, float displacement)> nextEnemyWaveList = new();
 
@@ -45,7 +45,7 @@ public class Medium
             waveIds.Add(0);
         }
 
-        priviousWavePowers = new Dictionary<int, float>();
+        previousWaveSigns = new Dictionary<int, float>();
     }
 
     public List<int> ToUniqueIds()
@@ -77,7 +77,7 @@ public class Medium
             float powerRatio = changedPowerSum / originalPowerSum;
             newWavePowers.Add(ids, powerRatio);
 
-            if (!priviousWavePowers.TryGetValue(ids, out float previousRatio))
+            if (!previousWaveSigns.TryGetValue(ids, out float previousRatio))
             {
                 continue;
             }
@@ -89,7 +89,7 @@ public class Medium
 
         }
 
-        priviousWavePowers = newWavePowers;
+        previousWaveSigns = newWavePowers;
 
         return wavePowerSum;
     }
@@ -101,7 +101,7 @@ public class Medium
         {
             if (waveIds[0] == id || waveIds[division - 1] == id) continue;
             int count = waveIds.Count(x => x == id);
-            if (count <= 5)
+            if (Constants.ShortestWaveLength >= count * Constants.Width / Constants.Division)
             {
                 for (int i = 0; i < division; i++)
                 {
@@ -133,7 +133,7 @@ public class Medium
         return wavePowerSum;
     }
 
-    public List<int> ReNewSeparetedWaveId(bool reverse = false)
+    public List<int> ReassignSeparatedWaveId(bool reverse = false)
     {
         List<int> newIds = new List<int>();
         List<int> uniqueIds = ToUniqueIds();

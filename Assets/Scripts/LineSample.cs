@@ -5,9 +5,9 @@ using System;
 
 public class LineSample : MonoBehaviour
 {
-    GameObject Player;
+    GameObject player;
 
-    [SerializeField] GameObject waveLendererObject;
+    [SerializeField] GameObject waveRendererPrefab;
 
     private float originalMoveInterval;
 
@@ -27,7 +27,7 @@ public class LineSample : MonoBehaviour
 
     public void Init(float laneY, GameObject player)
     {
-        this.Player = player;
+        this.player = player;
         playerMedium = new PlayerMedium(new Color32(255, 0, 0, 122), laneY);
         enemyMedium = new EnemyMedium(new Color32(0, 255, 0, 122), laneY);
 
@@ -49,12 +49,12 @@ public class LineSample : MonoBehaviour
 
             WavePowerCheck();
 
-            DestoryOutOfWave(playerMedium, playerWaves);
-            DestoryOutOfWave(enemyMedium, enemyWaves);
+            DestroyOutOfWave(playerMedium, playerWaves);
+            DestroyOutOfWave(enemyMedium, enemyWaves);
 
-            List<int> newIds = playerMedium.ReNewSeparetedWaveId();
+            List<int> newIds = playerMedium.ReassignSeparatedWaveId();
             MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
-            List<int> newIds2 = enemyMedium.ReNewSeparetedWaveId(reverse: true);
+            List<int> newIds2 = enemyMedium.ReassignSeparatedWaveId(reverse: true);
             MakeNewWave(newIds2, enemyMedium, playerMedium, enemyWaves);
 
             PlayerDamage();
@@ -70,7 +70,7 @@ public class LineSample : MonoBehaviour
 
         string debugText = "";
 
-        foreach (var (id, ratio) in playerMedium.priviousWavePowers)
+        foreach (var (id, ratio) in playerMedium.previousWaveSigns)
         {
             debugText += $"ID: {id}, Name: {ratio}\n";
         }
@@ -83,11 +83,11 @@ public class LineSample : MonoBehaviour
     private void MoveWave()
     {
         List<int> newIds;
-        if (playerMedium.laneY - Constants.LaneHeight / 2 <= Player.transform.position.y
-            && playerMedium.laneY + Constants.LaneHeight / 2 >= Player.transform.position.y
-            && Player.GetComponent<PlayerController>().canMove)
+        if (playerMedium.laneY - Constants.LaneHeight / 2 <= player.transform.position.y
+            && playerMedium.laneY + Constants.LaneHeight / 2 >= player.transform.position.y
+            && player.GetComponent<PlayerController>().canMove)
         {
-            newIds = playerMedium.WaveMove(Mouse.current.leftButton.isPressed, Player.transform.position.y - playerMedium.laneY);
+            newIds = playerMedium.WaveMove(Mouse.current.leftButton.isPressed, player.transform.position.y - playerMedium.laneY);
             MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
         }
         else
@@ -129,8 +129,8 @@ public class LineSample : MonoBehaviour
 
     private void WavePowerCheck()
     {
-        Player.GetComponent<PlayerController>().point += playerMedium.WavePowerCheck(enemyMedium);
-        Player.GetComponent<PlayerController>().point += enemyMedium.WavePowerCheck(playerMedium);
+        player.GetComponent<PlayerController>().point += playerMedium.WavePowerCheck(enemyMedium);
+        player.GetComponent<PlayerController>().point += enemyMedium.WavePowerCheck(playerMedium);
 
         playerMedium.DestroyTooSmallWave();
         enemyMedium.DestroyTooSmallWave();
@@ -141,7 +141,7 @@ public class LineSample : MonoBehaviour
         foreach (int id in ids)
         {
             if (waves.ContainsKey(id)) return;
-            GameObject gameObject = Instantiate(waveLendererObject);
+            GameObject gameObject = Instantiate(waveRendererPrefab);
 
             gameObject.transform.SetParent(transform);
             gameObject.GetComponent<OneWaveLenderer>().Init(medium, oppositeMedium, id);
@@ -150,7 +150,7 @@ public class LineSample : MonoBehaviour
         }
     }
 
-    private void DestoryOutOfWave(Medium medium, Dictionary<int, GameObject> waves)
+    private void DestroyOutOfWave(Medium medium, Dictionary<int, GameObject> waves)
     {
         List<int> keysToRemove = new List<int>();
         foreach (KeyValuePair<int, GameObject> pair in waves)
@@ -174,12 +174,12 @@ public class LineSample : MonoBehaviour
 
     private void PlayerDamage()
     {
-        if (playerMedium.laneY - Constants.LaneHeight / 2 <= Player.transform.position.y &&
-            Player.transform.position.y <= playerMedium.laneY + Constants.LaneHeight / 2)
+        if (playerMedium.laneY - Constants.LaneHeight / 2 <= player.transform.position.y &&
+            player.transform.position.y <= playerMedium.laneY + Constants.LaneHeight / 2)
         {
             if (enemyMedium.waveIds[0] != 0)
             {
-                Player.GetComponent<PlayerController>().Damage(Mathf.Abs(enemyMedium.wavePowers[0]) * Constants.Width / Constants.Division);
+                player.GetComponent<PlayerController>().Damage(Mathf.Abs(enemyMedium.wavePowers[0]) * Constants.Width / Constants.Division);
             }
         }
     }

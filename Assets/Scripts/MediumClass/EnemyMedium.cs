@@ -13,10 +13,10 @@ public class EnemyMedium : Medium
 
     private int enemyActionId = 0;
 
-    public void MakeSinWave(float waveLength, float amplitude, float wavecount)
+    public void MakeSinWave(float waveLength, float amplitude, float waveCount)
     {
         nextEnemyWaveList.Add((Constants.EnemyAction.WaveStart, 0));
-        for (int i = 0; i < division / width * waveLength * wavecount; i++)
+        for (int i = 0; i < division / width * waveLength * waveCount; i++)
         {
             nextEnemyWaveList.Add((Constants.EnemyAction.Wave, Mathf.Sin(2 * Mathf.PI * i * width / division / waveLength) * amplitude));
         }

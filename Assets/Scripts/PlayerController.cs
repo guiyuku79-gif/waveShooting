@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float maxSpeed = 1f;
     [SerializeField] private float smoothTime = 0.1f;
-    [SerializeField] private Image FuelImage;
+    [SerializeField] private Image fuelImage;
 
     [SerializeField] private TextMeshProUGUI pointText;
 
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
         if (canMove)
         {
             fuelRate -= damage;
-            FuelImage.fillAmount = fuelRate;
+            fuelImage.fillAmount = fuelRate;
         }
     }
 
@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             fuelRate += fuelChargeSpeed * Time.deltaTime;
-            FuelImage.fillAmount = fuelRate;
+            fuelImage.fillAmount = fuelRate;
             if (fuelRate >= 1f)
             {
                 canMove = true;
@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        FuelImage.fillAmount = fuelRate;
+        fuelImage.fillAmount = fuelRate;
 
     }
 }
