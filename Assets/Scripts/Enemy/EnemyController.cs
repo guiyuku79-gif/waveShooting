@@ -4,7 +4,7 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] Image HPBar;
 
-    [SerializeField] EnemyData data1;
+    EnemyData data;
 
     LineSample lineSample;
 
@@ -14,8 +14,9 @@ public class EnemyController : MonoBehaviour
     float priviousWavePower;
     float priviousWaveDuration;
 
-    public void Init(LineSample lineSample)
+    public void Init(LineSample lineSample, EnemyData enemyData)
     {
+        data = enemyData;
         this.lineSample = lineSample;
         transform.position = new Vector3(Constants.Width / 2, lineSample.playerMedium.laneY, 0);
         this.lineSample.WaveMoved += OnWaveMoved;
@@ -25,16 +26,10 @@ public class EnemyController : MonoBehaviour
 
 
         //仮
-        maxHp = data1.maxHp;
+        maxHp = data.maxHp;
         hp = maxHp;
 
-        lineSample.enemyMedium.SetPattern(data1);
-
-        // lineSample.enemyMedium.MakeTriangleWave(2, 1, 0.5f);
-        // lineSample.enemyMedium.MakeWait(2);
-        // lineSample.enemyMedium.MakeConstantWave(2, 1);
-        // lineSample.enemyMedium.MakeWait(2);
-
+        lineSample.enemyMedium.SetPattern(data);
 
     }
     private void OnWaveMoved()

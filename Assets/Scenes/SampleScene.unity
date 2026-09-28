@@ -901,7 +901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a7eb3f4c5b7054fa3db6d82e9c0ff3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  maxSpeed: 5
+  maxSpeed: 10
   smoothTime: 0.1
   FuelImage: {fileID: 1233288915}
   pointText: {fileID: 588385797}
@@ -1060,6 +1060,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWaveSet
   enemy: {fileID: 3838668243508411313, guid: d5eb4018bcea2b84380b74ba12eaf7b1, type: 3}
+  data1:
+  - {fileID: 11400000, guid: 9a53526856c95ba489736ee3eec574f7, type: 2}
 --- !u!1 &1552284961
 GameObject:
   m_ObjectHideFlags: 0

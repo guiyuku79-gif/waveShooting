@@ -44,7 +44,8 @@ public class LineSample : MonoBehaviour
             deltaTimeCount = 0;
             MoveWave();
 
-            moveInterval = IntervalChange();
+            //moveInterval = IntervalChange();
+            moveInterval = originalMoveInterval;
 
             WavePowerCheck();
 
