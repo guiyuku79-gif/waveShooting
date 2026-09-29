@@ -6,6 +6,7 @@ public class LaneGenerator : MonoBehaviour
 {
 
     [SerializeField] GameObject player;
+    [SerializeField] MotherShipController motherShip;
     [SerializeField] GameObject lineSample;
 
     public List<GameObject> lanes = new List<GameObject>();
@@ -24,7 +25,7 @@ public class LaneGenerator : MonoBehaviour
         foreach (float laneY in Constants.laneYs)
         {
             GameObject gameObject1 = Instantiate(lineSample);
-            gameObject1.GetComponent<LineSample>().Init(laneY, player);
+            gameObject1.GetComponent<LineSample>().Init(laneY, player, motherShip);
             lanes.Add(gameObject1);
         }
     }

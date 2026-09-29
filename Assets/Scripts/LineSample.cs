@@ -6,6 +6,7 @@ using System;
 public class LineSample : MonoBehaviour
 {
     GameObject player;
+    private MotherShipController motherShip;
 
     [SerializeField] GameObject waveRendererPrefab;
 
@@ -25,8 +26,9 @@ public class LineSample : MonoBehaviour
     public event Action WaveMoved;
 
 
-    public void Init(float laneY, GameObject player)
+    public void Init(float laneY, GameObject player, MotherShipController motherShip)
     {
+        this.motherShip = motherShip;
         this.player = player;
         playerMedium = new PlayerMedium(new Color32(255, 0, 0, 122), laneY);
         enemyMedium = new EnemyMedium(new Color32(0, 255, 0, 122), laneY);
@@ -58,6 +60,9 @@ public class LineSample : MonoBehaviour
             MakeNewWave(newIds2, enemyMedium, playerMedium, enemyWaves);
 
             PlayerDamage();
+            MotherShipDamage();
+
+            WaveMoved?.Invoke();
 
             WaveMoved?.Invoke();
         }
@@ -183,5 +188,15 @@ public class LineSample : MonoBehaviour
                 enemyMedium.DestroyOneDivision(Constants.PlayerDivisionX);
             }
         }
+    }
+
+    private void MotherShipDamage()
+    {
+        if (enemyMedium.waveIds[0] == 0) return;
+
+        float damage = Mathf.Abs(enemyMedium.wavePowers[0]) * Constants.Width / Constants.Division;
+
+        motherShip.Damage(damage);
+        enemyMedium.DestroyOneDivision(0);
     }
 }
