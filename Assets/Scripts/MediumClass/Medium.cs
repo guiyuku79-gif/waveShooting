@@ -98,6 +98,11 @@ public class Medium
         return wavePowerSum;
     }
 
+    public void DestroyOneDivision(int index)
+    {
+        wavePowers[index] = 0f;
+        waveIds[index] = 0;
+    }
 
     public void DestroyTooSmallWave(List<int> expectIndexes)
     {

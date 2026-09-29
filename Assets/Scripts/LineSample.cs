@@ -46,7 +46,6 @@ public class LineSample : MonoBehaviour
             MoveWave();
 
             //moveInterval = IntervalChange();
-            moveInterval = originalMoveInterval;
 
             WavePowerCheck();
 
@@ -178,9 +177,10 @@ public class LineSample : MonoBehaviour
         if (playerMedium.laneY - Constants.LaneHeight / 2 <= player.transform.position.y &&
             player.transform.position.y <= playerMedium.laneY + Constants.LaneHeight / 2)
         {
-            if (enemyMedium.waveIds[0] != 0)
+            if (enemyMedium.waveIds[Constants.PlayerDivisionX] != 0)
             {
-                player.GetComponent<PlayerController>().Damage(Mathf.Abs(enemyMedium.wavePowers[0]) * Constants.Width / Constants.Division);
+                player.GetComponent<PlayerController>().Damage(Mathf.Abs(enemyMedium.wavePowers[Constants.PlayerDivisionX]) * Constants.Width / Constants.Division);
+                enemyMedium.DestroyOneDivision(Constants.PlayerDivisionX);
             }
         }
     }
