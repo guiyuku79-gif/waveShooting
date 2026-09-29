@@ -99,13 +99,18 @@ public class Medium
     }
 
 
-    public void DestroyTooSmallWave()
+    public void DestroyTooSmallWave(List<int> expectIndexes)
     {
         foreach (int id in ToUniqueIds())
         {
-            if (waveIds[0] == id || waveIds[division - 1] == id) continue;
+            bool isNearCharacter = false;
+            foreach (int index in expectIndexes)
+            {
+                if (waveIds[index] == id) isNearCharacter = true;
+            }
+            if (waveIds[0] == id || waveIds[division - 1] == id) isNearCharacter = true;
             int count = waveIds.Count(x => x == id);
-            if (Constants.ShortestWaveLength >= count * Constants.Width / Constants.Division)
+            if (Constants.ShortestWaveLength >= count * Constants.Width / Constants.Division && !isNearCharacter)
             {
                 for (int i = 0; i < division; i++)
                 {

@@ -133,8 +133,8 @@ public class LineSample : MonoBehaviour
         player.GetComponent<PlayerController>().point += playerMedium.WavePowerCheck(enemyMedium);
         player.GetComponent<PlayerController>().point += enemyMedium.WavePowerCheck(playerMedium);
 
-        playerMedium.DestroyTooSmallWave();
-        enemyMedium.DestroyTooSmallWave();
+        playerMedium.DestroyTooSmallWave(new List<int> { Constants.PlayerDivisionX });
+        enemyMedium.DestroyTooSmallWave(new List<int> { });
     }
 
     private void MakeNewWave(List<int> ids, Medium medium, Medium oppositeMedium, Dictionary<int, GameObject> waves)

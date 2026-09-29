@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        transform.position = new Vector3(-Constants.Width / 2, 0, 0);
+        transform.position = new Vector3(-Constants.Width / 2 + Constants.PlayerX, 0, 0);
 
         fuelRate = 1.0f;
         point = 0;

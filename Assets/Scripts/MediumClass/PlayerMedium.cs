@@ -20,8 +20,8 @@ public class PlayerMedium : Medium
             wavePowers[i] = wavePowers[i - 1];
             waveIds[i] = waveIds[i - 1];
         }
-        waveIds[0] = isPressed ? nextWaveId : 0;
-        wavePowers[0] = displacement;
+        waveIds[Constants.PlayerDivisionX] = isPressed ? nextWaveId : 0;
+        wavePowers[Constants.PlayerDivisionX] = displacement;
     }
     public List<int> WaveMove(bool isPressed, float displacement)
     {
