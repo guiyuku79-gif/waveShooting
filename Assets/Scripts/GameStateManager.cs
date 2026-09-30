@@ -15,6 +15,7 @@ public class GameStateManager : MonoBehaviour
 
     [SerializeField] MotherShipController motherShipController;
     [SerializeField] GameObject GameOverText;
+    [SerializeField] GameObject GameClearText;
 
     public static GameStateManager Instance { get; private set; }
     private void Awake()
@@ -34,6 +35,8 @@ public class GameStateManager : MonoBehaviour
         GameState = GameStateName.Play;
         motherShipController.MotherShipDestroyed += GameOver;
         GameOverText.SetActive(false);
+        GameClearText.SetActive(false);
+
 
     }
 
@@ -47,17 +50,23 @@ public class GameStateManager : MonoBehaviour
 
         Debug.Log($"残りの敵: {enemyCount}");
 
-        if (enemyCount == 0)
+        if (enemyCount == 0 && GameState == GameStateName.Play)
         {
             Debug.Log("ゲームクリア！");
-            // クリア画面の表示など
+            GameState = GameStateName.GameClear;
+            GameClearText.SetActive(true);
         }
     }
 
 
     void GameOver()
     {
-        GameOverText.SetActive(true);
+        if (GameState == GameStateName.Play)
+        {
+            GameState = GameStateName.GameOver;
+            GameOverText.SetActive(true);
+        }
+
     }
 
     private void OnDestroy()
