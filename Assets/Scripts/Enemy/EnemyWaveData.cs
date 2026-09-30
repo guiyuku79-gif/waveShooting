@@ -26,7 +26,7 @@ public static class EnemyWaveData
         new List<WaveSetAction>
         {
             new WaveSetAction(type:WaveSetActionType.Spawn,enemyId:0,laneYId:1),
-            new WaveSetAction(type:WaveSetActionType.Spawn,enemyId:0,laneYId:0),
+            new WaveSetAction(type:WaveSetActionType.Spawn,enemyId:1,laneYId:0),
             new WaveSetAction(type:WaveSetActionType.Spawn,enemyId:0,laneYId:2),
         }),
 
