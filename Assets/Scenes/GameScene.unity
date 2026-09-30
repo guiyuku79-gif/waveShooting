@@ -331,6 +331,7 @@ GameObject:
   - component: {fileID: 446867508}
   - component: {fileID: 446867507}
   - component: {fileID: 446867506}
+  - component: {fileID: 446867509}
   m_Layer: 5
   m_Name: ReturnStageSelect
   m_TagString: Untagged
@@ -401,7 +402,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 446867507}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 446867509}
+        m_TargetAssemblyTypeName: ToStageSelectButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &446867507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,6 +453,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446867504}
   m_CullTransparentMesh: 1
+--- !u!114 &446867509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446867504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92888116802cc864bb8692717cc762ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToStageSelectButton
 --- !u!1 &484412720
 GameObject:
   m_ObjectHideFlags: 0
