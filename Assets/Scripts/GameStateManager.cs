@@ -9,6 +9,8 @@ public class GameStateManager : MonoBehaviour
         GameClear
     }
 
+    private int enemyCount;
+
     public GameStateName GameState { get; private set; }
 
     [SerializeField] MotherShipController motherShipController;
@@ -23,6 +25,8 @@ public class GameStateManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        enemyCount = GetComponent<EnemyWaveSet>().CountSpawn();
     }
 
     void Start()
@@ -32,6 +36,24 @@ public class GameStateManager : MonoBehaviour
         GameOverText.SetActive(false);
 
     }
+
+    public void RegisterEnemy(EnemyController enemy)
+    {
+        enemy.Defeated += OnEnemyDefeated;
+    }
+    private void OnEnemyDefeated()
+    {
+        enemyCount--;
+
+        Debug.Log($"残りの敵: {enemyCount}");
+
+        if (enemyCount == 0)
+        {
+            Debug.Log("ゲームクリア！");
+            // クリア画面の表示など
+        }
+    }
+
 
     void GameOver()
     {

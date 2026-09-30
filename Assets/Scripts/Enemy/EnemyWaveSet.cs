@@ -57,7 +57,7 @@ public class EnemyWaveSet : MonoBehaviour
 
                         EnemyController controller = obj.GetComponent<EnemyController>();
 
-                        GetComponent<ClearManager>().RegisterEnemy(controller);
+                        GetComponent<GameStateManager>().RegisterEnemy(controller);
 
                         LineSample lane = LaneGenerator.Instance
                             .lanes[action.laneYId].GetComponent<LineSample>();
