@@ -63,8 +63,6 @@ public class LineSample : MonoBehaviour
             MotherShipDamage();
 
             WaveMoved?.Invoke();
-
-            WaveMoved?.Invoke();
         }
 
 
