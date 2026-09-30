@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework.Internal;
 using UnityEngine;
 
@@ -10,22 +11,22 @@ public enum WaveSetActionType
 }
 
 [System.Serializable]
-public class WaveSetAction
+public class WaveSetAction //敵を生成する、待機するなどの行動1つ
 {
     public WaveSetActionType type;
-    public int waveId;
+    public int enemyId;
     public float waitTime;
 
     public int laneYId;
 
     public WaveSetAction(
         WaveSetActionType type,
-        int waveId = 0,
+        int enemyId = 0,
         float waitTime = 0f,
         int laneYId = 1)
     {
         this.type = type;
-        this.waveId = waveId;
+        this.enemyId = enemyId;
         this.waitTime = waitTime;
         this.laneYId = laneYId;
     }
@@ -38,12 +39,12 @@ public class EnemyWaveSet : MonoBehaviour
     [SerializeField] List<EnemyData> data1; //敵の種類
 
 
-    List<WaveSetAction> waveSetActions = new List<WaveSetAction>
+    List<WaveSetAction> waveSetActions = new List<WaveSetAction> { };
+
+    void Awake()
     {
-        new WaveSetAction(type:WaveSetActionType.Spawn,waveId:0,laneYId:1),
-        new WaveSetAction(type: WaveSetActionType.Wait, waitTime: 5f),
-        new WaveSetAction(type:WaveSetActionType.Spawn,waveId:0,laneYId:0),
-    };
+        waveSetActions = EnemyWaveData.EnemyWaveDataList.FirstOrDefault(x => x.id == StageSelection.SelectedStageId).waveSetActions;
+    }
 
     IEnumerator Start()
     {
@@ -62,7 +63,7 @@ public class EnemyWaveSet : MonoBehaviour
                         LineSample lane = LaneGenerator.Instance
                             .lanes[action.laneYId].GetComponent<LineSample>();
 
-                        controller.Init(lane, data1[action.waveId]);
+                        controller.Init(lane, data1[action.enemyId]);
 
                         break;
                     }
