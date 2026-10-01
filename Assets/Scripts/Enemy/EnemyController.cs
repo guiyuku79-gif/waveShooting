@@ -35,6 +35,7 @@ public class EnemyController : MonoBehaviour
     }
     private void OnWaveMoved()
     {
+        transform.position = new Vector3(Constants.Width / 2, lineSample.playerMedium.laneY + lineSample.enemyMedium.wavePowers[^1], 0);
         if (isDefeated) return;
 
         float currentWavePower = lineSample.playerMedium.wavePowers[^1];

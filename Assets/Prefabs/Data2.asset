@@ -12,5 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59e3c97930130ac4c887cfd86611bd2b, type: 3}
   m_Name: Data2
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  maxHp: 5
-  actions: []
+  maxHp: 3
+  actions:
+  - type: 1
+    waveLength: 1
+    amplitude: 1
+    waveCount: 0.5
+  - type: 3
+    waveLength: 1
+    amplitude: 0
+    waveCount: 0
+  - type: 1
+    waveLength: 1
+    amplitude: 1
+    waveCount: 0.5
+  - type: 3
+    waveLength: 8
+    amplitude: 0
+    waveCount: 0
