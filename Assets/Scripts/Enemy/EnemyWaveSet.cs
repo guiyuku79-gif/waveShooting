@@ -63,6 +63,8 @@ public class EnemyWaveSet : MonoBehaviour
                         LineSample lane = LaneGenerator.Instance
                             .lanes[action.laneYId].GetComponent<LineSample>();
 
+                        obj.transform.SetParent(LaneGenerator.Instance.lanes[action.laneYId].transform, false);
+
                         controller.Init(lane, data1[action.enemyId]);
 
                         break;

@@ -20,7 +20,9 @@ public class EnemyController : MonoBehaviour
     {
         data = enemyData;
         this.lineSample = lineSample;
-        transform.position = new Vector3(Constants.Width / 2, lineSample.playerMedium.laneY, 0);
+
+        //localPositionで設定しないとワールド座標になる
+        transform.localPosition = new Vector3(Constants.Width / 2, 0, 0);
         this.lineSample.WaveMoved += OnWaveMoved;
 
         this.previousWaveSign = 0;
@@ -35,7 +37,7 @@ public class EnemyController : MonoBehaviour
     }
     private void OnWaveMoved()
     {
-        transform.position = new Vector3(Constants.Width / 2, lineSample.playerMedium.laneY + lineSample.enemyMedium.wavePowers[^1], 0);
+        transform.localPosition = new Vector3(Constants.Width / 2, lineSample.enemyMedium.wavePowers[^1], 0);
         if (isDefeated) return;
 
         float currentWavePower = lineSample.playerMedium.wavePowers[^1];

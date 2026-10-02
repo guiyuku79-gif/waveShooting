@@ -37,6 +37,8 @@ public class LineSample : MonoBehaviour
 
         originalMoveInterval = 1 / (Constants.Division / Constants.Width * Constants.WaveSpeed);
         moveInterval = originalMoveInterval;
+
+        transform.position = new Vector3(0, laneY, 0);
     }
 
     void Update()
