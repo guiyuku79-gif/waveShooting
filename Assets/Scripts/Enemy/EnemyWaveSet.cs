@@ -67,6 +67,9 @@ public class EnemyWaveSet : MonoBehaviour
 
                         controller.Init(lane, data1[action.enemyId]);
 
+                        //LineSampleに敵の情報を保存しておく
+                        lane.enemies.Add(controller);
+
                         break;
                     }
 

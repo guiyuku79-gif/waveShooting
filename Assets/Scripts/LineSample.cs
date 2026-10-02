@@ -25,6 +25,8 @@ public class LineSample : MonoBehaviour
 
     public event Action WaveMoved;
 
+    public List<EnemyController> enemies = new();
+
 
     public void Init(float laneY, GameObject player, MotherShipController motherShip)
     {
@@ -198,5 +200,10 @@ public class LineSample : MonoBehaviour
 
         motherShip.Damage(damage);
         enemyMedium.DestroyOneDivision(0);
+    }
+
+    public void UnregisterEnemy(EnemyController enemy)
+    {
+        enemies.Remove(enemy);
     }
 }

@@ -79,6 +79,10 @@ public class EnemyController : MonoBehaviour
     private void OnDestroy()
     {
         if (lineSample != null)
+        {
             lineSample.WaveMoved -= OnWaveMoved;
+            lineSample.UnregisterEnemy(this);
+        }
+
     }
 }
