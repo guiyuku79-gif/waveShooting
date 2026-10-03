@@ -24,7 +24,8 @@ public static class Constants
     {
         Wait,
         Wave,
-        WaveStart
+        WaveStart,
+        Move
     }
 
 }

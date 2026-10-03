@@ -120,7 +120,7 @@ public class EnemyMedium : Medium
 
         foreach (var waveSources in newWaveSources)
         {
-            wavePowers[waveSources.x] = waveSources.displacement;
+            wavePowers[waveSources.x] += waveSources.displacement;
             waveIds[waveSources.x] = waveSources.id;
         }
     }

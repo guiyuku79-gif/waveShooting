@@ -6,7 +6,8 @@ public enum EnemyActionType
     Sin,
     Triangle,
     Constant,
-    Wait
+    Wait,
+    Move
 }
 
 [System.Serializable]
@@ -40,8 +41,15 @@ public class EnemyData : ScriptableObject
             if (step.type == EnemyActionType.Wait)
             {
                 for (int i = 0; i < samplesPerUnit * step.waveLength; i++)
-                    waves.Add((Constants.EnemyAction.Wait, 0f));
+                    waves.Add((Constants.EnemyAction.Wait, 0));
 
+                continue;
+            }
+
+            if (step.type == EnemyActionType.Move)
+            {
+                for (int i = 0; i < samplesPerUnit * step.waveLength; i++)
+                    waves.Add((Constants.EnemyAction.Move, step.waveCount));
                 continue;
             }
 

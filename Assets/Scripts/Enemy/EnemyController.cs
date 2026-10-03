@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using Unity.VisualScripting;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] Image HPBar;
@@ -54,10 +55,11 @@ public class EnemyController : MonoBehaviour
     private void OnWaveMoved()
     {
         transform.localPosition = new Vector3(-Constants.Width / 2 + positionX * Constants.Width / Constants.Division,
-                                                 lineSample.enemyMedium.wavePowers[^1], 0);
+                                                 lineSample.enemyMedium.wavePowers[positionX], 0);
         if (isDefeated) return;
 
-        float currentWavePower = lineSample.playerMedium.wavePowers[^1];
+        float currentWavePower = lineSample.playerMedium.wavePowers[positionX];
+        lineSample.playerMedium.DestroyOneDivision(positionX);
         if (currentWavePower != 0)
         {
             if (previousWaveSign == 0)
@@ -85,7 +87,7 @@ public class EnemyController : MonoBehaviour
             if (hp <= 0)
             {
                 isDefeated = true;
-                lineSample.enemyMedium.nextEnemyWaveList.Clear();
+                //lineSample.enemyMedium.nextEnemyWaveList.Clear();
 
                 Defeated?.Invoke();
                 Destroy(gameObject);
@@ -132,6 +134,10 @@ public class EnemyController : MonoBehaviour
 
                 case Constants.EnemyAction.Wave:
                     return (nextWaveId, nextWave.displacement, positionX, newIds);
+
+                case Constants.EnemyAction.Move:
+                    positionX = (int)Mathf.Clamp(positionX + (int)nextWave.displacement, 0, Constants.Division - 1);
+                    return (-1, 0, 0, newIds);
             }
 
 

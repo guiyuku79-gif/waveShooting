@@ -22,3 +22,7 @@ MonoBehaviour:
     waveLength: 6
     amplitude: 0
     waveCount: 0
+  - type: 4
+    waveLength: 1
+    amplitude: 0
+    waveCount: -1
