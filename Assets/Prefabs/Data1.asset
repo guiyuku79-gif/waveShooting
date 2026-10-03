@@ -15,7 +15,7 @@ MonoBehaviour:
   maxHp: 3
   actions:
   - type: 1
-    waveLength: 1
+    waveLength: 4
     amplitude: 1
     waveCount: 0.5
   - type: 3
@@ -23,7 +23,7 @@ MonoBehaviour:
     amplitude: 0
     waveCount: 0
   - type: 1
-    waveLength: 1
+    waveLength: 4
     amplitude: 1
     waveCount: 0.5
   - type: 3
