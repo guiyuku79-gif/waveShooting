@@ -54,7 +54,7 @@ public class EnemyController : MonoBehaviour
     private void OnWaveMoved()
     {
         transform.localPosition = new Vector3(-Constants.Width / 2 + positionX * Constants.Width / Constants.Division,
-                                                 lineSample.enemyMedium.wavePowers[positionX], 0);
+                                                 nextEnemyWaveList[enemyActionId].displacement, 0);
         if (isDefeated) return;
 
         float currentWavePower = lineSample.playerMedium.wavePowers[positionX];

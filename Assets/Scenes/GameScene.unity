@@ -1605,7 +1605,6 @@ MonoBehaviour:
   pointText: {fileID: 588385797}
   fuelRate: 0
   canMove: 0
-  isShooting: 0
   point: 0
   playerSprite: {fileID: 484412721}
   blinkCycle: 1
@@ -1904,6 +1903,7 @@ MonoBehaviour:
   data1:
   - {fileID: 11400000, guid: 9a53526856c95ba489736ee3eec574f7, type: 2}
   - {fileID: 11400000, guid: 4eb1563824ceeee4b8ba0d7f4d92a697, type: 2}
+  - {fileID: 11400000, guid: d2f7cb0a547934a41bd22f311a7162c8, type: 2}
 --- !u!114 &1517922215
 MonoBehaviour:
   m_ObjectHideFlags: 0

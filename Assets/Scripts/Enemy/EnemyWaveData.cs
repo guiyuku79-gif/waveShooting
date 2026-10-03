@@ -29,6 +29,14 @@ public static class EnemyWaveData
             new WaveSetAction(type:WaveSetActionType.Spawn,enemyId:1,laneYId:0),
             new WaveSetAction(type:WaveSetActionType.Spawn,enemyId:0,laneYId:2),
         }),
+        new OneEnemyWaveData(3,
+        new List<WaveSetAction>
+        {
+            new WaveSetAction(type:WaveSetActionType.Spawn,enemyId:0,laneYId:1),
+            new WaveSetAction(type:WaveSetActionType.Wait,waitTime: 5f),
+            new WaveSetAction(type:WaveSetActionType.Spawn,enemyId:2,laneYId:1),
+        }),
+
 
     };
 }
