@@ -38,6 +38,7 @@ public class EnemyWaveSet : MonoBehaviour
 
     [SerializeField] List<EnemyData> data1; //敵の種類
 
+    private int initialNextWaveId;
 
     List<WaveSetAction> waveSetActions = new List<WaveSetAction> { };
 
@@ -48,6 +49,7 @@ public class EnemyWaveSet : MonoBehaviour
 
     IEnumerator Start()
     {
+        initialNextWaveId = 1;
         foreach (var action in waveSetActions)
         {
             switch (action.type)
@@ -65,10 +67,12 @@ public class EnemyWaveSet : MonoBehaviour
 
                         obj.transform.SetParent(LaneGenerator.Instance.lanes[action.laneYId].transform, false);
 
-                        controller.Init(lane, data1[action.enemyId]);
+                        controller.Init(lane, data1[action.enemyId], initialNextWaveId);
 
                         //LineSampleに敵の情報を保存しておく
                         lane.enemies.Add(controller);
+
+                        initialNextWaveId += 1000;
 
                         break;
                     }

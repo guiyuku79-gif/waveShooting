@@ -34,7 +34,7 @@ public class Medium
         WaveColor = color;
 
         nextWaveId = 1;
-        nextWaveIdForSeparate = 100000;
+        nextWaveIdForSeparate = 1000000;
 
         wavePowers = new List<float>();
         waveIds = new List<int>();

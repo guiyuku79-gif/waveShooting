@@ -108,4 +108,21 @@ public class EnemyMedium : Medium
         return newIds;
     }
 
+    public void Move(List<(int id, float displacement, int x)> newWaveSources)
+    {
+        for (int i = 0; i < division - 1; i++)
+        {
+            wavePowers[i] = wavePowers[i + 1];
+            waveIds[i] = waveIds[i + 1];
+        }
+        wavePowers[division - 1] = 0;
+        waveIds[division - 1] = 0;
+
+        foreach (var waveSources in newWaveSources)
+        {
+            wavePowers[waveSources.x] = waveSources.displacement;
+            waveIds[waveSources.x] = waveSources.id;
+        }
+    }
+
 }

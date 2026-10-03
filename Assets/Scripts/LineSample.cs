@@ -89,6 +89,7 @@ public class LineSample : MonoBehaviour
 
     private void MoveWave()
     {
+        //プレイヤーの動き
         List<int> newIds;
         if (playerMedium.laneY - Constants.LaneHeight / 2 <= player.transform.position.y
             && playerMedium.laneY + Constants.LaneHeight / 2 >= player.transform.position.y
@@ -103,9 +104,25 @@ public class LineSample : MonoBehaviour
             MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
         }
 
+        //敵の動き
+        // newIds = enemyMedium.WaveMove();
+        // MakeNewWave(newIds, enemyMedium, playerMedium, enemyWaves);
 
-        newIds = enemyMedium.WaveMove();
+        newIds.Clear();
+        List<(int id, float displacement, int x)> newWaveSources = new();
+
+        foreach (EnemyController enemy in enemies)
+        {
+            var waveData = enemy.WaveMove();
+            newIds.AddRange(waveData.newIds);
+            newWaveSources.Add((waveData.id, waveData.displacement, waveData.x));
+        }
+
+        enemyMedium.Move(newWaveSources);
         MakeNewWave(newIds, enemyMedium, playerMedium, enemyWaves);
+
+
+
 
     }
 
@@ -139,8 +156,8 @@ public class LineSample : MonoBehaviour
         player.GetComponent<PlayerController>().point += playerMedium.WavePowerCheck(enemyMedium);
         player.GetComponent<PlayerController>().point += enemyMedium.WavePowerCheck(playerMedium);
 
-        playerMedium.DestroyTooSmallWave(new List<int> { Constants.PlayerDivisionX });
-        enemyMedium.DestroyTooSmallWave(new List<int> { });
+        // playerMedium.DestroyTooSmallWave(new List<int> { Constants.PlayerDivisionX });
+        // enemyMedium.DestroyTooSmallWave(new List<int> { });
     }
 
     private void MakeNewWave(List<int> ids, Medium medium, Medium oppositeMedium, Dictionary<int, GameObject> waves)

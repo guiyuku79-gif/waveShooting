@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] Image HPBar;
@@ -16,28 +18,43 @@ public class EnemyController : MonoBehaviour
     public event System.Action Defeated;
     private bool isDefeated;
 
-    public void Init(LineSample lineSample, EnemyData enemyData)
+    //敵の行動用
+    [NonSerialized] public List<(Constants.EnemyAction action, float displacement)> nextEnemyWaveList = new();
+    public int enemyActionId;
+
+    //波のIDを指定する用
+    private int nextWaveId;
+    public int positionX;
+
+    public void Init(LineSample lineSample, EnemyData enemyData, int nextWaveId)
     {
         data = enemyData;
         this.lineSample = lineSample;
+        this.nextWaveId = nextWaveId;
+        //仮
+        positionX = Constants.Division - 30;
 
         //localPositionで設定しないとワールド座標になる
-        transform.localPosition = new Vector3(Constants.Width / 2, 0, 0);
+        transform.localPosition = new Vector3(-Constants.Width / 2 + positionX * Constants.Width / Constants.Division, 0, 0);
+
+
         this.lineSample.WaveMoved += OnWaveMoved;
 
         this.previousWaveSign = 0;
 
-
-        //仮
         maxHp = data.maxHp;
         hp = maxHp;
 
+        //消す予定
         lineSample.enemyMedium.SetPattern(data);
 
+        nextEnemyWaveList = data.CreateWaveList();
+        enemyActionId = 0;
     }
     private void OnWaveMoved()
     {
-        transform.localPosition = new Vector3(Constants.Width / 2, lineSample.enemyMedium.wavePowers[^1], 0);
+        transform.localPosition = new Vector3(-Constants.Width / 2 + positionX * Constants.Width / Constants.Division,
+                                                 lineSample.enemyMedium.wavePowers[^1], 0);
         if (isDefeated) return;
 
         float currentWavePower = lineSample.playerMedium.wavePowers[^1];
@@ -84,5 +101,41 @@ public class EnemyController : MonoBehaviour
             lineSample.UnregisterEnemy(this);
         }
 
+    }
+
+    //波のID 波の強さ 波のX座標　新しい波のID
+    public (int id, float displacement, int x, List<int> newIds) WaveMove()
+    {
+        List<int> newIds = new List<int>();
+        if (nextEnemyWaveList.Count == 0)
+        {
+            return (-1, 0, 0, newIds);
+        }
+        else
+        {
+            var nextWave = nextEnemyWaveList[enemyActionId];
+
+            enemyActionId++;
+            if (enemyActionId >= nextEnemyWaveList.Count) enemyActionId = 0;
+
+            switch (nextWave.action)
+            {
+                case Constants.EnemyAction.Wait:
+                    return (-1, 0, 0, newIds);
+
+                case Constants.EnemyAction.WaveStart:
+                    nextWaveId++;
+                    newIds.Add(nextWaveId);
+
+                    enemyActionId++;
+                    return (nextWaveId, nextEnemyWaveList[enemyActionId - 1].displacement, positionX, newIds);
+
+                case Constants.EnemyAction.Wave:
+                    return (nextWaveId, nextWave.displacement, positionX, newIds);
+            }
+
+
+        }
+        return (-1, 0, 0, newIds);
     }
 }
