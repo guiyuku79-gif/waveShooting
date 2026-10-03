@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   maxHp: 5
   actions:
-  - type: 0
+  - type: 1
     waveLength: 2
     amplitude: 1
     waveCount: 1
   - type: 3
-    waveLength: 6
+    waveLength: 1
     amplitude: 0
     waveCount: 0
   - type: 4

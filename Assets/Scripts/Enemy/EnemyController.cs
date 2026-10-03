@@ -33,8 +33,7 @@ public class EnemyController : MonoBehaviour
         this.lineSample = lineSample;
         this.nextWaveId = nextWaveId;
         //仮
-        positionX = Constants.Division - 30;
-
+        positionX = Constants.Division - 1;
         //localPositionで設定しないとワールド座標になる
         transform.localPosition = new Vector3(-Constants.Width / 2 + positionX * Constants.Width / Constants.Division, 0, 0);
 
@@ -136,7 +135,7 @@ public class EnemyController : MonoBehaviour
                     return (nextWaveId, nextWave.displacement, positionX, newIds);
 
                 case Constants.EnemyAction.Move:
-                    positionX = (int)Mathf.Clamp(positionX + (int)nextWave.displacement, 0, Constants.Division - 1);
+                    positionX = (int)Mathf.Clamp(positionX + (int)nextWave.displacement, 30, Constants.Division - 1);
                     return (-1, 0, 0, newIds);
             }
 
