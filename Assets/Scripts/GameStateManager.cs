@@ -55,6 +55,9 @@ public class GameStateManager : MonoBehaviour
             Debug.Log("ゲームクリア！");
             GameState = GameStateName.GameClear;
             GameClearText.SetActive(true);
+
+            //仮
+            StageAcheivement.progress[StageSelection.SelectedStageId] = 3;
         }
     }
 

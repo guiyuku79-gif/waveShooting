@@ -14,7 +14,11 @@ public class StageSelectManager : MonoBehaviour
             StageSelectButton button =
                 Instantiate(stageButtonPrefab, buttonParent);
 
-            button.Init(stageId, SelectStage);
+            button.transform.position = new Vector3(-12f + stageId * 4, 0, 0);
+
+            int stageAcheivement = StageAcheivement.progress[stageId];
+
+            button.Init(stageId, SelectStage,stageAcheivement);
         }
     }
 
