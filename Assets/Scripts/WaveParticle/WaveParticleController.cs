@@ -20,7 +20,7 @@ public class WaveParticleController : MonoBehaviour
         }
         else
         {
-            spriteRenderer.color = Color.yellow;
+            spriteRenderer.color = Color.green;
         }
 
         playerMedium = player;

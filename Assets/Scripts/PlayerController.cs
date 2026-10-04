@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     //点滅処理用
     [SerializeField] private SpriteRenderer playerSprite;
+    [SerializeField] private SpriteRenderer gunSprite;
     [SerializeField, Min(0.01f)] private float blinkCycle = 1f;
     [SerializeField, Range(0f, 1f)] private float minAlpha = 0.2f;
 
@@ -159,5 +160,6 @@ public class PlayerController : MonoBehaviour
         }
 
         playerSprite.color = color;
+        gunSprite.color = color;
     }
 }
