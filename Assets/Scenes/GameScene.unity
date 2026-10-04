@@ -214,6 +214,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MotherShipController
   hp: 0
+  maxHp: 1
+  moveRange: 0.3
+  moveCycle: 2.5
 --- !u!1 &417952610
 GameObject:
   m_ObjectHideFlags: 0
