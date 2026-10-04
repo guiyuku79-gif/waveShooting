@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour
     private float velocityY;
 
     //波の残量についての変数
-    public float fuelRate;
-    public bool canMove;
+    private float fuelRate;
+    public bool CanMove { get; private set; }
 
     private float fuelConsumeSpeed = 0.1f;
     private float fuelChargeSpeed = 0.2f;
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
         fuelRate = 1.0f;
         point = 0;
-        canMove = true;
+        CanMove = true;
 
     }
 
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (!canMove) return;
+        if (!CanMove) return;
 
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
 
     public void Damage(float damage)
     {
-        if (canMove)
+        if (CanMove)
         {
             fuelRate -= damage;
             fuelImage.fillAmount = fuelRate;
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
 
     private void FuelChange()
     {
-        if (canMove)
+        if (CanMove)
         {
             if (Mouse.current.leftButton.isPressed)
             {
@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
             }
             fuelRate = Mathf.Clamp01(fuelRate);
 
-            if (fuelRate <= 0f) canMove = false;
+            if (fuelRate <= 0f) CanMove = false;
         }
         else
         {
@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
             fuelImage.fillAmount = fuelRate;
             if (fuelRate >= 1f)
             {
-                canMove = true;
+                CanMove = true;
                 fuelRate = 1f;
             }
         }
@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
         playerSprite.enabled = true;
         Color color = playerSprite.color;
 
-        if (canMove)
+        if (CanMove)
         {
             blinkTimer = 0f;
             color.a = 1f;

@@ -93,7 +93,7 @@ public class LineSample : MonoBehaviour
         List<int> newIds;
         if (playerMedium.laneY - Constants.LaneHeight / 2 <= player.transform.position.y
             && playerMedium.laneY + Constants.LaneHeight / 2 >= player.transform.position.y
-            && player.GetComponent<PlayerController>().canMove)
+            && player.GetComponent<PlayerController>().CanMove)
         {
             newIds = playerMedium.WaveMove(Mouse.current.leftButton.isPressed, player.transform.position.y - playerMedium.laneY);
             MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
