@@ -26,17 +26,29 @@ public class GameStateManager : MonoBehaviour
             return;
         }
         Instance = this;
-
-        enemyCount = GetComponent<EnemyWaveSet>().CountSpawn();
     }
 
     void Start()
     {
-        GameState = GameStateName.Play;
-        motherShipController.MotherShipDestroyed += GameOver;
         GameOverText.SetActive(false);
         GameClearText.SetActive(false);
 
+        EnemyWaveSet enemyWaveSet = GetComponent<EnemyWaveSet>();
+
+        int stageId = StageSelection.SelectedStageId;
+
+        if (!enemyWaveSet.Initialize(stageId))
+        {
+            return;
+        }
+
+        //EnemyWaveSetが準備し終わった後に敵の数を設定
+        enemyCount = enemyWaveSet.CountSpawn();
+
+        GameState = GameStateName.Play;
+        motherShipController.MotherShipDestroyed += GameOver;
+
+        StartCoroutine(enemyWaveSet.SpawnEnemies());
 
     }
 

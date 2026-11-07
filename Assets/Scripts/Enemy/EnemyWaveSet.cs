@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework.Internal;
 using UnityEngine;
 
 public enum WaveSetActionType
@@ -42,12 +41,22 @@ public class EnemyWaveSet : MonoBehaviour
 
     List<WaveSetAction> waveSetActions = new List<WaveSetAction> { };
 
-    void Awake()
+    public bool Initialize(int stageId)
     {
-        waveSetActions = EnemyWaveData.EnemyWaveDataList.FirstOrDefault(x => x.id == StageSelection.SelectedStageId).waveSetActions;
+        var stage = EnemyWaveData.EnemyWaveDataList.FirstOrDefault(x => x.id == stageId);
+
+        if (stage == null)
+        {
+            Debug.LogError($"{stageId}のデータがありません", this);
+
+            return false;
+        }
+
+        waveSetActions = stage.waveSetActions;
+        return true;
     }
 
-    IEnumerator Start()
+    public IEnumerator SpawnEnemies()
     {
         initialNextWaveId = 1;
         foreach (var action in waveSetActions)
