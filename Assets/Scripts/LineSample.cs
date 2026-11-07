@@ -16,8 +16,8 @@ public class LineSample : MonoBehaviour
     private float deltaTimeCount;
 
 
-    private Dictionary<int, GameObject> playerWaves = new Dictionary<int, GameObject>();
-    private Dictionary<int, GameObject> enemyWaves = new Dictionary<int, GameObject>();
+    private WaveViewCollection playerWaveViews;
+    private WaveViewCollection enemyWaveViews;
 
 
     [NonSerialized] public PlayerMedium playerMedium;
@@ -34,6 +34,20 @@ public class LineSample : MonoBehaviour
         this.player = player;
         playerMedium = new PlayerMedium(new Color32(255, 0, 0, 122), laneY);
         enemyMedium = new EnemyMedium(new Color32(0, 255, 0, 122), laneY);
+
+        playerWaveViews = new WaveViewCollection(
+            waveRendererPrefab,
+            transform,
+            playerMedium,
+            enemyMedium
+        );
+
+        enemyWaveViews = new WaveViewCollection(
+            waveRendererPrefab,
+            transform,
+            enemyMedium,
+            playerMedium
+        );
 
         deltaTimeCount = 0f;
 
@@ -59,13 +73,13 @@ public class LineSample : MonoBehaviour
 
             WavePowerCheck();
 
-            DestroyOutOfWave(playerMedium, playerWaves);
-            DestroyOutOfWave(enemyMedium, enemyWaves);
+            playerWaveViews.RemoveMissingViews();
+            enemyWaveViews.RemoveMissingViews();
 
             List<int> newIds = playerMedium.ReassignSeparatedWaveId();
-            MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
+            playerWaveViews.CreateViews(newIds);
             List<int> newIds2 = enemyMedium.ReassignSeparatedWaveId(reverse: true);
-            MakeNewWave(newIds2, enemyMedium, playerMedium, enemyWaves);
+            enemyWaveViews.CreateViews(newIds2);
 
             PlayerDamage();
             MotherShipDamage();
@@ -105,17 +119,13 @@ public class LineSample : MonoBehaviour
             && player.GetComponent<PlayerController>().CanMove)
         {
             newIds = playerMedium.WaveMove(Mouse.current.leftButton.isPressed, player.transform.position.y - playerMedium.laneY);
-            MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
+            playerWaveViews.CreateViews(newIds);
         }
         else
         {
             newIds = playerMedium.WaveMove(false, 0);
-            MakeNewWave(newIds, playerMedium, enemyMedium, playerWaves);
+            playerWaveViews.CreateViews(newIds);
         }
-
-        //敵の動き
-        // newIds = enemyMedium.WaveMove();
-        // MakeNewWave(newIds, enemyMedium, playerMedium, enemyWaves);
 
         newIds.Clear();
         List<(int id, float displacement, int x)> newWaveSources = new();
@@ -128,10 +138,7 @@ public class LineSample : MonoBehaviour
         }
 
         enemyMedium.Move(newWaveSources);
-        MakeNewWave(newIds, enemyMedium, playerMedium, enemyWaves);
-
-
-
+        enemyWaveViews.CreateViews(newIds);
 
     }
 
@@ -172,42 +179,6 @@ public class LineSample : MonoBehaviour
             exceptPositions.Add(enemy.positionX);
         }
         enemyMedium.DestroyTooSmallWave(exceptPositions);
-    }
-
-    private void MakeNewWave(List<int> ids, Medium medium, Medium oppositeMedium, Dictionary<int, GameObject> waves)
-    {
-        foreach (int id in ids)
-        {
-            if (waves.ContainsKey(id)) continue;
-            GameObject gameObject = Instantiate(waveRendererPrefab);
-
-            gameObject.transform.SetParent(transform);
-            gameObject.GetComponent<OneWaveLenderer>().Init(medium, oppositeMedium, id);
-            waves.Add(id, gameObject);
-
-        }
-    }
-
-    private void DestroyOutOfWave(Medium medium, Dictionary<int, GameObject> waves)
-    {
-        List<int> keysToRemove = new List<int>();
-        foreach (KeyValuePair<int, GameObject> pair in waves)
-        {
-            if (medium.waveIds.IndexOf(pair.Key) == -1)
-            {
-                //出している最中の波は消さない
-                if (pair.Key == medium.nextWaveId) continue;
-
-                Destroy(pair.Value);
-                keysToRemove.Add(pair.Key);
-
-            }
-        }
-
-        foreach (var key in keysToRemove)
-        {
-            waves.Remove(key);
-        }
     }
 
     private void PlayerDamage()
