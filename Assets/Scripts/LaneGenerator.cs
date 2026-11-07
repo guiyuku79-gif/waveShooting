@@ -32,6 +32,10 @@ public class LaneGenerator : MonoBehaviour
 
     void Update()
     {
+        if (!GameStateManager.Instance.IsPlaying)
+        {
+            return;
+        }
         //仮
         if (Keyboard.current.aKey.wasPressedThisFrame)
         {

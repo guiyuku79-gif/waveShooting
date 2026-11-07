@@ -45,6 +45,10 @@ public class LineSample : MonoBehaviour
 
     void Update()
     {
+        if (!GameStateManager.Instance.IsPlaying)
+        {
+            return;
+        }
         deltaTimeCount += Time.deltaTime;
         if (deltaTimeCount >= moveInterval)
         {
@@ -65,6 +69,11 @@ public class LineSample : MonoBehaviour
 
             PlayerDamage();
             MotherShipDamage();
+
+            if (!GameStateManager.Instance.IsPlaying)
+            {
+                return;
+            }
 
             WaveMoved?.Invoke();
         }

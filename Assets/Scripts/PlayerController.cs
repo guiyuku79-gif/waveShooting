@@ -41,11 +41,16 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        pointText.text = $"point: {(int)(point * 10)}";
+
+        if (!GameStateManager.Instance.IsPlaying)
+        {
+            return;
+        }
+        
         Move();
         FuelChange();
         UpdateBlink();
-
-        pointText.text = $"point: {(int)(point * 10)}";
     }
 
     private void Move()

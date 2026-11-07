@@ -6,12 +6,16 @@ public class GameStateManager : MonoBehaviour
     {
         Play,
         GameOver,
-        GameClear
+        GameClear,
+        Preparing
     }
 
     private int enemyCount;
 
-    public GameStateName GameState { get; private set; }
+    public GameStateName GameState { get; private set; } = GameStateName.Preparing;
+
+    public bool IsPlaying => GameState == GameStateName.Play;
+    private Coroutine spawnCoroutine;
 
     [SerializeField] MotherShipController motherShipController;
     [SerializeField] GameObject GameOverText;
@@ -48,7 +52,7 @@ public class GameStateManager : MonoBehaviour
         GameState = GameStateName.Play;
         motherShipController.MotherShipDestroyed += GameOver;
 
-        StartCoroutine(enemyWaveSet.SpawnEnemies());
+        spawnCoroutine = StartCoroutine(enemyWaveSet.SpawnEnemies());
 
     }
 
@@ -62,26 +66,37 @@ public class GameStateManager : MonoBehaviour
 
         Debug.Log($"残りの敵: {enemyCount}");
 
-        if (enemyCount == 0 && GameState == GameStateName.Play)
+        if (enemyCount == 0)
         {
-            Debug.Log("ゲームクリア！");
-            GameState = GameStateName.GameClear;
-            GameClearText.SetActive(true);
-
-            //仮
-            StageAcheivement.progress[StageSelection.SelectedStageId] = 3;
+            EndGame(GameStateName.GameClear);
         }
     }
 
 
     void GameOver()
     {
-        if (GameState == GameStateName.Play)
+        EndGame(GameStateName.GameOver);
+    }
+
+    private void EndGame(GameStateName result)
+    {
+        if (!IsPlaying) return;
+
+        GameState = result;
+
+        if (spawnCoroutine != null)
         {
-            GameState = GameStateName.GameOver;
-            GameOverText.SetActive(true);
+            StopCoroutine(spawnCoroutine);
+            spawnCoroutine = null;
         }
 
+        GameOverText.SetActive(result == GameStateName.GameOver);
+        GameClearText.SetActive(result == GameStateName.GameClear);
+
+        if (result == GameStateName.GameClear)
+        {
+            StageAcheivement.progress[StageSelection.SelectedStageId] = 3;
+        }
     }
 
     private void OnDestroy()

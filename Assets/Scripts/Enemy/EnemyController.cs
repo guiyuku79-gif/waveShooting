@@ -53,6 +53,10 @@ public class EnemyController : MonoBehaviour
     }
     private void OnWaveMoved()
     {
+        if (!GameStateManager.Instance.IsPlaying)
+        {
+            return;
+        }
         transform.localPosition = new Vector3(-Constants.Width / 2 + positionX * Constants.Width / Constants.Division,
                                                  nextEnemyWaveList[enemyActionId].displacement, 0);
         if (isDefeated) return;
