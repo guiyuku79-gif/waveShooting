@@ -6,7 +6,6 @@ using System;
 public class LineSample : MonoBehaviour
 {
     GameObject player;
-    private MotherShipController motherShip;
 
     [SerializeField] GameObject waveRendererPrefab;
 
@@ -19,6 +18,8 @@ public class LineSample : MonoBehaviour
     private WaveViewCollection playerWaveViews;
     private WaveViewCollection enemyWaveViews;
 
+    private LaneDamageResolver damageResolver;
+
 
     [NonSerialized] public PlayerMedium playerMedium;
     [NonSerialized] public EnemyMedium enemyMedium;
@@ -30,7 +31,6 @@ public class LineSample : MonoBehaviour
 
     public void Init(float laneY, GameObject player, MotherShipController motherShip)
     {
-        this.motherShip = motherShip;
         this.player = player;
         playerMedium = new PlayerMedium(new Color32(255, 0, 0, 122), laneY);
         enemyMedium = new EnemyMedium(new Color32(0, 255, 0, 122), laneY);
@@ -47,6 +47,12 @@ public class LineSample : MonoBehaviour
             transform,
             enemyMedium,
             playerMedium
+        );
+
+        damageResolver = new LaneDamageResolver(
+            enemyMedium,
+            player.GetComponent<PlayerController>(),
+            motherShip
         );
 
         deltaTimeCount = 0f;
@@ -81,8 +87,8 @@ public class LineSample : MonoBehaviour
             List<int> newIds2 = enemyMedium.ReassignSeparatedWaveId(reverse: true);
             enemyWaveViews.CreateViews(newIds2);
 
-            PlayerDamage();
-            MotherShipDamage();
+            damageResolver.ApplyPlayerDamage();
+            damageResolver.ApplyMotherShipDamage();
 
             if (!GameStateManager.Instance.IsPlaying)
             {
@@ -179,29 +185,6 @@ public class LineSample : MonoBehaviour
             exceptPositions.Add(enemy.positionX);
         }
         enemyMedium.DestroyTooSmallWave(exceptPositions);
-    }
-
-    private void PlayerDamage()
-    {
-        if (playerMedium.laneY - Constants.LaneHeight / 2 <= player.transform.position.y &&
-            player.transform.position.y <= playerMedium.laneY + Constants.LaneHeight / 2)
-        {
-            if (enemyMedium.waveIds[Constants.PlayerDivisionX] != 0)
-            {
-                player.GetComponent<PlayerController>().Damage(Mathf.Abs(enemyMedium.wavePowers[Constants.PlayerDivisionX]) * Constants.Width / Constants.Division);
-                enemyMedium.DestroyOneDivision(Constants.PlayerDivisionX);
-            }
-        }
-    }
-
-    private void MotherShipDamage()
-    {
-        if (enemyMedium.waveIds[0] == 0) return;
-
-        float damage = Mathf.Abs(enemyMedium.wavePowers[0]) * Constants.Width / Constants.Division;
-
-        motherShip.Damage(damage);
-        enemyMedium.DestroyOneDivision(0);
     }
 
     public void UnregisterEnemy(EnemyController enemy)

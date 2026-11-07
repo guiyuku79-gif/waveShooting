@@ -25,15 +25,16 @@ public sealed class WaveViewCollection
 
     public void CreateViews(List<int> waveIds)
     {
-        foreach(int id in waveIds)
+        foreach (int id in waveIds)
         {
-            if(views.ContainsKey(id)) continue;
+            if (views.ContainsKey(id)) continue;
 
             GameObject view = Object.Instantiate(prefab);
+            view.transform.SetParent(parent);
 
             view.GetComponent<OneWaveLenderer>().Init(medium, oppositeMedium, id);
 
-            views.Add(id,view);
+            views.Add(id, view);
         }
     }
 
@@ -41,17 +42,17 @@ public sealed class WaveViewCollection
     {
         List<int> idsToRemove = new();
 
-        foreach(var pair in views)
+        foreach (var pair in views)
         {
-            if(medium.waveIds.Contains(pair.Key)) continue;
+            if (medium.waveIds.Contains(pair.Key)) continue;
 
-            if(pair.Key == medium.nextWaveId) continue;
+            if (pair.Key == medium.nextWaveId) continue;
 
             Object.Destroy(pair.Value);
             idsToRemove.Add(pair.Key);
         }
 
-        foreach(int id in idsToRemove)
+        foreach (int id in idsToRemove)
         {
             views.Remove(id);
         }
