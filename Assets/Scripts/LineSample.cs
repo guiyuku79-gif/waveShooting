@@ -20,6 +20,9 @@ public class LineSample : MonoBehaviour
 
     private LaneDamageResolver damageResolver;
 
+    private WaveSimulation waveSimulation;
+    private PlayerController playerController;
+
 
     [NonSerialized] public PlayerMedium playerMedium;
     [NonSerialized] public EnemyMedium enemyMedium;
@@ -34,6 +37,10 @@ public class LineSample : MonoBehaviour
         this.player = player;
         playerMedium = new PlayerMedium(new Color32(255, 0, 0, 122), laneY);
         enemyMedium = new EnemyMedium(new Color32(0, 255, 0, 122), laneY);
+
+        playerController = player.GetComponent<PlayerController>();
+
+        waveSimulation = new WaveSimulation(playerMedium,enemyMedium);
 
         playerWaveViews = new WaveViewCollection(
             waveRendererPrefab,
@@ -51,7 +58,7 @@ public class LineSample : MonoBehaviour
 
         damageResolver = new LaneDamageResolver(
             enemyMedium,
-            player.GetComponent<PlayerController>(),
+            playerController,
             motherShip
         );
 
@@ -69,38 +76,56 @@ public class LineSample : MonoBehaviour
         {
             return;
         }
+
         deltaTimeCount += Time.deltaTime;
-        if (deltaTimeCount >= moveInterval)
+
+        if (deltaTimeCount < moveInterval)
         {
-            deltaTimeCount = 0;
-            MoveWave();
-
-            //moveInterval = IntervalChange();
-
-            WavePowerCheck();
-
-            playerWaveViews.RemoveMissingViews();
-            enemyWaveViews.RemoveMissingViews();
-
-            List<int> newIds = playerMedium.ReassignSeparatedWaveId();
-            playerWaveViews.CreateViews(newIds);
-            List<int> newIds2 = enemyMedium.ReassignSeparatedWaveId(reverse: true);
-            enemyWaveViews.CreateViews(newIds2);
-
-            damageResolver.ApplyPlayerDamage();
-            damageResolver.ApplyMotherShipDamage();
-
-            if (!GameStateManager.Instance.IsPlaying)
-            {
-                return;
-            }
-
-            WaveMoved?.Invoke();
+            return;
         }
 
+        deltaTimeCount = 0;
 
+        // 1. プレイヤーと敵の波を移動する
+        MoveWave();
+
+        // 2. 波の発生位置を計算担当へ渡す
+        // 敵の移動後の位置を使うため、MoveWave() の後に集める
+        List<int> enemyPositions = new();
+
+        foreach (EnemyController enemy in enemies)
+        {
+            enemyPositions.Add(enemy.positionX);
+        }
+
+        // 3. 干渉と小さな波の除去を行い、ポイントを加算する
+        float earnedPoints =
+            waveSimulation.ResolveInterference(enemyPositions);
+
+        playerController.point += earnedPoints;
+
+        // 4. 消えた波の描画を片付ける
+        playerWaveViews.RemoveMissingViews();
+        enemyWaveViews.RemoveMissingViews();
+
+        // 5. 分裂した波にIDを割り当て、描画を追加する
+        var separatedWaves = waveSimulation.ReassignSeparatedWaves();
+
+        playerWaveViews.CreateViews(separatedWaves.playerIds);
+        enemyWaveViews.CreateViews(separatedWaves.enemyIds);
+
+        // 6. プレイヤーと母艦へのダメージを処理する
+        damageResolver.ApplyPlayerDamage();
+        damageResolver.ApplyMotherShipDamage();
+
+        if (!GameStateManager.Instance.IsPlaying)
+        {
+            return;
+        }
+
+        // 7. 敵に波の更新完了を通知する
+        WaveMoved?.Invoke();
     }
-
     void OnGUI()
     {
 
@@ -122,7 +147,7 @@ public class LineSample : MonoBehaviour
         List<int> newIds;
         if (playerMedium.laneY - Constants.LaneHeight / 2 <= player.transform.position.y
             && playerMedium.laneY + Constants.LaneHeight / 2 >= player.transform.position.y
-            && player.GetComponent<PlayerController>().CanMove)
+            && playerController.CanMove)
         {
             newIds = playerMedium.WaveMove(Mouse.current.leftButton.isPressed, player.transform.position.y - playerMedium.laneY);
             playerWaveViews.CreateViews(newIds);
@@ -173,19 +198,7 @@ public class LineSample : MonoBehaviour
 
     }
 
-    private void WavePowerCheck()
-    {
-        player.GetComponent<PlayerController>().point += playerMedium.WavePowerCheck(enemyMedium);
-        player.GetComponent<PlayerController>().point += enemyMedium.WavePowerCheck(playerMedium);
 
-        playerMedium.DestroyTooSmallWave(new List<int> { Constants.PlayerDivisionX });
-        List<int> exceptPositions = new();
-        foreach (EnemyController enemy in enemies)
-        {
-            exceptPositions.Add(enemy.positionX);
-        }
-        enemyMedium.DestroyTooSmallWave(exceptPositions);
-    }
 
     public void UnregisterEnemy(EnemyController enemy)
     {
