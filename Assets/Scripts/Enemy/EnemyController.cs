@@ -9,16 +9,13 @@ public class EnemyController : MonoBehaviour
 
     LineSample lineSample;
 
-    float maxHp = 1f;
-    float hp;
-
-    int previousWaveSign;
-
     public event System.Action Defeated;
     private bool isDefeated;
 
 
     private EnemyActionRunner actionRunner;
+
+    private EnemyHealth health;
 
     public int positionX => actionRunner.PositionX;
 
@@ -34,11 +31,10 @@ public class EnemyController : MonoBehaviour
 
         transform.localPosition = new Vector3(-Constants.Width / 2 + positionX * Constants.Width / Constants.Division, 0, 0);
 
-        previousWaveSign = 0;
-        isDefeated = false;
+        health = new EnemyHealth(data.maxHp, Constants.Width / Constants.Division);
 
-        maxHp = data.maxHp;
-        hp = maxHp;
+        isDefeated = false;
+        HPBar.fillAmount = health.HpRatio;
 
         this.lineSample.WaveMoved += OnWaveMoved;
     }
@@ -49,43 +45,38 @@ public class EnemyController : MonoBehaviour
         {
             return;
         }
-        transform.localPosition = new Vector3(-Constants.Width / 2 + positionX * Constants.Width / Constants.Division,
-        actionRunner.currentDisplacement, 0);
 
-        float currentWavePower = lineSample.playerMedium.wavePowers[positionX];
+        // 行動結果を見た目に反映する
+        transform.localPosition = new Vector3(
+            -Constants.Width / 2
+                + positionX * Constants.Width / Constants.Division,
+            actionRunner.currentDisplacement,
+            0);
+
+        // 敵の位置に届いた波を読み取り、消費する
+        float wavePower =
+            lineSample.playerMedium.wavePowers[positionX];
+
         lineSample.playerMedium.DestroyOneDivision(positionX);
-        if (currentWavePower != 0)
+
+        // ダメージ計算を任せ、結果を表示する
+        health.ApplyWave(wavePower);
+        HPBar.fillAmount = health.HpRatio;
+
+        if (health.IsDead)
         {
-            if (previousWaveSign == 0)
-            {
-                hp -= 0.5f;
-                previousWaveSign = currentWavePower > 0 ? 1 : -1;
-            }
-            else
-            {
-                if (currentWavePower > 1f && previousWaveSign == -1)
-                {
-                    hp -= 0.5f;
-                    previousWaveSign = 1;
-                }
-                else if (currentWavePower < -1f && previousWaveSign == 1)
-                {
-                    hp -= 0.5f;
-                    previousWaveSign = -1;
-                }
-            }
-
-            hp -= Constants.Width / Constants.Division;
-
-            HPBar.fillAmount = hp / maxHp;
-            if (hp <= 0)
-            {
-                isDefeated = true;
-
-                Defeated?.Invoke();
-                Destroy(gameObject);
-            }
+            Defeat();
         }
+    }
+    private void Defeat()
+    {
+        if (isDefeated) return;
+
+        // 通知より先に設定し、二重通知を防ぐ
+        isDefeated = true;
+
+        Defeated?.Invoke();
+        Destroy(gameObject);
     }
 
 
