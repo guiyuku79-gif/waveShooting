@@ -143,34 +143,41 @@ public class LineSample : MonoBehaviour
 
     private void MoveWave()
     {
-        //プレイヤーの動き
-        List<int> newIds;
-        if (playerMedium.laneY - Constants.LaneHeight / 2 <= player.transform.position.y
-            && playerMedium.laneY + Constants.LaneHeight / 2 >= player.transform.position.y
-            && playerController.CanMove)
-        {
-            newIds = playerMedium.WaveMove(Mouse.current.leftButton.isPressed, player.transform.position.y - playerMedium.laneY);
-            playerWaveViews.CreateViews(newIds);
-        }
-        else
-        {
-            newIds = playerMedium.WaveMove(false, 0);
-            playerWaveViews.CreateViews(newIds);
-        }
+        // 1. プレイヤーの入力・状態を取得する
+        bool isPressed =
+            Mouse.current != null &&
+            Mouse.current.leftButton.isPressed;
 
-        newIds.Clear();
-        List<(int id, float displacement, int x)> newWaveSources = new();
+        bool canEmit = playerController.CanMove;
+        float playerY = player.transform.position.y;
+
+        // 2. プレイヤーの波を進め、新しい波を描画する
+        List<int> playerNewIds = waveSimulation.MovePlayerWave(
+            isPressed,
+            canEmit,
+            playerY);
+
+        playerWaveViews.CreateViews(playerNewIds);
+
+        // 3. 各敵の行動を進め、波の発生情報を集める
+        List<int> enemyNewIds = new();
+        List<(int id, float displacement, int x)> enemyWaveSources = new();
 
         foreach (EnemyController enemy in enemies)
         {
             var waveData = enemy.WaveMove();
-            newIds.AddRange(waveData.newIds);
-            newWaveSources.Add((waveData.id, waveData.displacement, waveData.x));
+
+            enemyNewIds.AddRange(waveData.newIds);
+
+            enemyWaveSources.Add((
+                waveData.id,
+                waveData.displacement,
+                waveData.x));
         }
 
-        enemyMedium.Move(newWaveSources);
-        enemyWaveViews.CreateViews(newIds);
-
+        // 4. 敵の波を進め、新しい波を描画する
+        waveSimulation.MoveEnemyWaves(enemyWaveSources);
+        enemyWaveViews.CreateViews(enemyNewIds);
     }
 
 

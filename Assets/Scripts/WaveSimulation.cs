@@ -33,4 +33,22 @@ public sealed class WaveSimulation
 
         return (playerIds, enemyIds);
     }
+
+    public List<int> MovePlayerWave(bool isPressed, bool canEmit, float playerY)
+    {
+        float halfLaneHeight = Constants.LaneHeight / 2f;
+
+        bool isInLane = playerY >= playerMedium.laneY - halfLaneHeight && playerY <= playerMedium.laneY + halfLaneHeight;
+
+        bool isEmitting = isPressed && canEmit && isInLane;
+
+        float displacement = isEmitting ? playerY - playerMedium.laneY : 0f;
+
+        return playerMedium.WaveMove(isEmitting, displacement);
+    }
+    public void MoveEnemyWaves(
+    List<(int id, float displacement, int x)> waveSources)
+    {
+        enemyMedium.Move(waveSources);
+    }
 }
