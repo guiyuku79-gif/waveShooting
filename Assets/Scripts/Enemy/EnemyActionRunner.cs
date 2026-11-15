@@ -29,26 +29,19 @@ public sealed class EnemyActionRunner
         return action;
     }
 
-    public (
-        bool hasWave,
-        int id,
-        float displacement,
-        int x,
-        List<int> newIds) Step()
+    public EnemyActionResult Step()
     {
-        List<int> newIds = new();
         currentDisplacement = 0f;
 
-        // 行動がない敵や撃破済みの敵は波を出さない
         if (actions.Count == 0)
         {
-            return (false, 0, 0f, PositionX, newIds);
+            return EnemyActionResult.NoWave(PositionX);
         }
 
+        bool isNewWave = false;
         var action = ReadNextAction();
 
-        // WaveStart は開始マーカー。
-        // 同じ更新内で、その直後の最初の波データも読む。
+        // 開始マーカーと最初の波データを同じ更新で読む
         if (action.action == Constants.EnemyAction.WaveStart)
         {
             if (actions[actionIndex].action
@@ -57,11 +50,11 @@ public sealed class EnemyActionRunner
                 Debug.LogError(
                     "WaveStartの直後にはWaveが必要です。");
 
-                return (false, 0, 0f, PositionX, newIds);
+                return EnemyActionResult.NoWave(PositionX);
             }
 
             nextWaveId++;
-            newIds.Add(nextWaveId);
+            isNewWave = true;
 
             action = ReadNextAction();
         }
@@ -71,12 +64,11 @@ public sealed class EnemyActionRunner
             case Constants.EnemyAction.Wave:
                 currentDisplacement = action.displacement;
 
-                return (
-                    true,
-                    nextWaveId,
-                    currentDisplacement,
-                    PositionX,
-                    newIds);
+                return EnemyActionResult.Emit(
+                    waveId: nextWaveId,
+                    displacement: currentDisplacement,
+                    positionX: PositionX,
+                    isNewWave: isNewWave);
 
             case Constants.EnemyAction.Move:
                 PositionX = (int)Mathf.Clamp(
@@ -90,6 +82,6 @@ public sealed class EnemyActionRunner
                 break;
         }
 
-        return (false, 0, 0f, PositionX, newIds);
+        return EnemyActionResult.NoWave(PositionX);
     }
 }

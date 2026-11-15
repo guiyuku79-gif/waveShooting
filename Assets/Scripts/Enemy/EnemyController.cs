@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using System;
+
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] Image HPBar;
@@ -91,18 +90,13 @@ public class EnemyController : MonoBehaviour
 
 
 
-    public (
-        bool hasWave,
-        int id,
-        float displacement,
-        int x,
-        List<int> newIds) WaveMove()
+    public EnemyActionResult WaveMove()
     {
 
         // 撃破済みの敵は波を出さない
         if (isDefeated)
         {
-            return (false, 0, 0f, positionX, new List<int>());
+            return EnemyActionResult.NoWave(positionX);
         }
 
         return actionRunner.Step();

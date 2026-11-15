@@ -165,19 +165,23 @@ public class LineSample : MonoBehaviour
 
         foreach (EnemyController enemy in enemies)
         {
-            var waveData = enemy.WaveMove();
+            EnemyActionResult result = enemy.WaveMove();
 
-            if (!waveData.hasWave)
+            if (!result.HasWave)
             {
                 continue;
             }
 
-            enemyNewIds.AddRange(waveData.newIds);
+            // 描画オブジェクトは、新しい波の開始時だけ追加する
+            if (result.IsNewWave)
+            {
+                enemyNewIds.Add(result.WaveId);
+            }
 
             enemyWaveSources.Add((
-                waveData.id,
-                waveData.displacement,
-                waveData.x));
+                result.WaveId,
+                result.Displacement,
+                result.PositionX));
         }
 
         // 4. 敵の波を進め、新しい波を描画する
