@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
-using Unity.VisualScripting;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] Image HPBar;
@@ -18,6 +17,8 @@ public class EnemyController : MonoBehaviour
 
     public event System.Action Defeated;
     private bool isDefeated;
+
+    private float currentDisplacement;
 
     //敵の行動用
     [NonSerialized] public List<(Constants.EnemyAction action, float displacement)> nextEnemyWaveList = new();
@@ -47,15 +48,18 @@ public class EnemyController : MonoBehaviour
 
         nextEnemyWaveList = data.CreateWaveList();
         enemyActionId = 0;
+
+        currentDisplacement = 0f;
     }
+
     private void OnWaveMoved()
     {
-        if (!GameStateManager.Instance.IsPlaying)
+        if (!GameStateManager.Instance.IsPlaying || isDefeated)
         {
             return;
         }
         transform.localPosition = new Vector3(-Constants.Width / 2 + positionX * Constants.Width / Constants.Division,
-                                                 nextEnemyWaveList[enemyActionId].displacement, 0);
+        currentDisplacement, 0);
         if (isDefeated) return;
 
         float currentWavePower = lineSample.playerMedium.wavePowers[positionX];
@@ -94,6 +98,83 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private (Constants.EnemyAction action, float displacement) ReadNextAction()
+    {
+        var action = nextEnemyWaveList[enemyActionId];
+
+        enemyActionId = (enemyActionId + 1) % nextEnemyWaveList.Count;
+
+        return action;
+    }
+
+
+    public (
+        bool hasWave,
+        int id,
+        float displacement,
+        int x,
+        List<int> newIds) WaveMove()
+    {
+        List<int> newIds = new();
+
+        currentDisplacement = 0f;
+
+        // 行動がない敵や撃破済みの敵は波を出さない
+        if (isDefeated || nextEnemyWaveList.Count == 0)
+        {
+            return (false, 0, 0f, positionX, newIds);
+        }
+
+        var action = ReadNextAction();
+
+        // WaveStart は開始マーカー。
+        // 同じ更新内で、その直後の最初の波データも読む。
+        if (action.action == Constants.EnemyAction.WaveStart)
+        {
+            if (nextEnemyWaveList[enemyActionId].action
+                != Constants.EnemyAction.Wave)
+            {
+                Debug.LogError(
+                    "WaveStartの直後にはWaveが必要です。",
+                    this);
+
+                return (false, 0, 0f, positionX, newIds);
+            }
+
+            nextWaveId++;
+            newIds.Add(nextWaveId);
+
+            action = ReadNextAction();
+        }
+
+        switch (action.action)
+        {
+            case Constants.EnemyAction.Wave:
+                currentDisplacement = action.displacement;
+
+                return (
+                    true,
+                    nextWaveId,
+                    currentDisplacement,
+                    positionX,
+                    newIds);
+
+            case Constants.EnemyAction.Move:
+                positionX = (int)Mathf.Clamp(
+                    positionX + (int)action.displacement,
+                    30,
+                    Constants.Division - 1);
+
+                break;
+
+            case Constants.EnemyAction.Wait:
+                break;
+        }
+
+        return (false, 0, 0f, positionX, newIds);
+    }
+
+
     private void OnDestroy()
     {
         if (lineSample != null)
@@ -102,45 +183,5 @@ public class EnemyController : MonoBehaviour
             lineSample.UnregisterEnemy(this);
         }
 
-    }
-
-    //波のID 波の強さ 波のX座標　新しい波のID
-    public (int id, float displacement, int x, List<int> newIds) WaveMove()
-    {
-        List<int> newIds = new List<int>();
-        if (nextEnemyWaveList.Count == 0)
-        {
-            return (-1, 0, 0, newIds);
-        }
-        else
-        {
-            var nextWave = nextEnemyWaveList[enemyActionId];
-
-            enemyActionId++;
-            if (enemyActionId >= nextEnemyWaveList.Count) enemyActionId = 0;
-
-            switch (nextWave.action)
-            {
-                case Constants.EnemyAction.Wait:
-                    return (-1, 0, 0, newIds);
-
-                case Constants.EnemyAction.WaveStart:
-                    nextWaveId++;
-                    newIds.Add(nextWaveId);
-
-                    enemyActionId++;
-                    return (nextWaveId, nextEnemyWaveList[enemyActionId - 1].displacement, positionX, newIds);
-
-                case Constants.EnemyAction.Wave:
-                    return (nextWaveId, nextWave.displacement, positionX, newIds);
-
-                case Constants.EnemyAction.Move:
-                    positionX = (int)Mathf.Clamp(positionX + (int)nextWave.displacement, 30, Constants.Division - 1);
-                    return (-1, 0, 0, newIds);
-            }
-
-
-        }
-        return (-1, 0, 0, newIds);
     }
 }

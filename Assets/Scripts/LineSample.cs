@@ -40,7 +40,7 @@ public class LineSample : MonoBehaviour
 
         playerController = player.GetComponent<PlayerController>();
 
-        waveSimulation = new WaveSimulation(playerMedium,enemyMedium);
+        waveSimulation = new WaveSimulation(playerMedium, enemyMedium);
 
         playerWaveViews = new WaveViewCollection(
             waveRendererPrefab,
@@ -166,6 +166,11 @@ public class LineSample : MonoBehaviour
         foreach (EnemyController enemy in enemies)
         {
             var waveData = enemy.WaveMove();
+
+            if (!waveData.hasWave)
+            {
+                continue;
+            }
 
             enemyNewIds.AddRange(waveData.newIds);
 
