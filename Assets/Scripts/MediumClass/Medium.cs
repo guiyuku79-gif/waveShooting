@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using UnityEngine;
-using System.Data.Common;
 using UnityEngine.AdaptivePerformance; //Debug.Log用
 
 public class Medium
@@ -21,9 +20,6 @@ public class Medium
     public Color32 WaveColor { get; private set; }
 
     public Dictionary<int, float> previousWaveSigns;
-
-    public List<(Constants.EnemyAction action, float displacement)> nextEnemyWaveList = new();
-
 
     public Medium(Color32 color, float laneY)
     {

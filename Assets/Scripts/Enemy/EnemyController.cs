@@ -45,9 +45,6 @@ public class EnemyController : MonoBehaviour
         maxHp = data.maxHp;
         hp = maxHp;
 
-        //消す予定
-        lineSample.enemyMedium.SetPattern(data);
-
         nextEnemyWaveList = data.CreateWaveList();
         enemyActionId = 0;
     }
@@ -90,7 +87,6 @@ public class EnemyController : MonoBehaviour
             if (hp <= 0)
             {
                 isDefeated = true;
-                //lineSample.enemyMedium.nextEnemyWaveList.Clear();
 
                 Defeated?.Invoke();
                 Destroy(gameObject);

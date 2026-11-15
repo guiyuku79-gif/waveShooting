@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 public class LaneGenerator : MonoBehaviour
 {
 
@@ -30,20 +28,4 @@ public class LaneGenerator : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (!GameStateManager.Instance.IsPlaying)
-        {
-            return;
-        }
-        //仮
-        if (Keyboard.current.aKey.wasPressedThisFrame)
-        {
-            lanes[1].GetComponent<LineSample>().enemyMedium.MakeSinWave(4, 2, 1.5f);
-        }
-        if (Keyboard.current.sKey.wasPressedThisFrame)
-        {
-            lanes[1].GetComponent<LineSample>().enemyMedium.MakeTriangleWave(2, 1, 0.5f);
-        }
-    }
 }
