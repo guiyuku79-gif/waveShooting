@@ -27,9 +27,7 @@ public class LineSample : MonoBehaviour
     [NonSerialized] public PlayerMedium playerMedium;
     [NonSerialized] public EnemyMedium enemyMedium;
 
-    public event Action WaveMoved;
-
-    public List<EnemyController> enemies = new();
+    private readonly List<EnemyController> enemies = new();
 
 
     public void Init(float laneY, GameObject player, MotherShipController motherShip)
@@ -76,6 +74,9 @@ public class LineSample : MonoBehaviour
         {
             return;
         }
+
+        enemies.RemoveAll(
+            enemy => enemy == null || enemy.IsDefeated);
 
         deltaTimeCount += Time.deltaTime;
 
@@ -124,7 +125,7 @@ public class LineSample : MonoBehaviour
         }
 
         // 7. 敵に波の更新完了を通知する
-        WaveMoved?.Invoke();
+        ResolveEnemyHits();
     }
     void OnGUI()
     {
@@ -189,6 +190,30 @@ public class LineSample : MonoBehaviour
         enemyWaveViews.CreateViews(enemyNewIds);
     }
 
+    private void ResolveEnemyHits()
+    {
+        foreach (EnemyController enemy in enemies)
+        {
+            // 直前の敵の撃破でゲームクリアになる場合もある
+            if (!GameStateManager.Instance.IsPlaying)
+            {
+                break;
+            }
+
+            if (enemy == null || enemy.IsDefeated)
+            {
+                continue;
+            }
+
+            int index = enemy.positionX;
+
+            float wavePower = playerMedium.wavePowers[index];
+            playerMedium.DestroyOneDivision(index);
+
+            enemy.ApplyWaveHit(wavePower);
+        }
+    }
+
 
     //波が重なっているほど時間をゆっくりにする
     private float IntervalChange()
@@ -215,9 +240,13 @@ public class LineSample : MonoBehaviour
     }
 
 
-
-    public void UnregisterEnemy(EnemyController enemy)
+    public void RegisterEnemy(EnemyController enemy)
     {
-        enemies.Remove(enemy);
+        if (enemy == null || enemies.Contains(enemy))
+        {
+            return;
+        }
+
+        enemies.Add(enemy);
     }
 }

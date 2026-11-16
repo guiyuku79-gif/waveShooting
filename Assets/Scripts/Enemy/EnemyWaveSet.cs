@@ -76,10 +76,10 @@ public class EnemyWaveSet : MonoBehaviour
 
                         obj.transform.SetParent(LaneGenerator.Instance.lanes[action.laneYId].transform, false);
 
-                        controller.Init(lane, data1[action.enemyId], initialNextWaveId);
 
-                        //LineSampleに敵の情報を保存しておく
-                        lane.enemies.Add(controller);
+                        controller.Init(data1[action.enemyId], initialNextWaveId);
+                        
+                        lane.RegisterEnemy(controller);
 
                         initialNextWaveId += 1000;
 

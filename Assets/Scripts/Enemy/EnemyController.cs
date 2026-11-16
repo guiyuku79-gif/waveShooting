@@ -7,10 +7,10 @@ public class EnemyController : MonoBehaviour
 
     EnemyData data;
 
-    LineSample lineSample;
 
     public event System.Action Defeated;
     private bool isDefeated;
+    public bool IsDefeated => isDefeated;
 
 
     private EnemyActionRunner actionRunner;
@@ -19,10 +19,9 @@ public class EnemyController : MonoBehaviour
 
     public int positionX => actionRunner.PositionX;
 
-    public void Init(LineSample lineSample, EnemyData enemyData, int nextWaveId)
+    public void Init( EnemyData enemyData, int nextWaveId)
     {
         data = enemyData;
-        this.lineSample = lineSample;
 
         actionRunner = new EnemyActionRunner(
             data.CreateWaveList(),
@@ -35,31 +34,20 @@ public class EnemyController : MonoBehaviour
 
         isDefeated = false;
         HPBar.fillAmount = health.HpRatio;
-
-        this.lineSample.WaveMoved += OnWaveMoved;
     }
 
-    private void OnWaveMoved()
+    public void ApplyWaveHit(float wavePower)
     {
-        if (!GameStateManager.Instance.IsPlaying || isDefeated)
-        {
-            return;
-        }
+        if (isDefeated) return;
 
-        // 行動結果を見た目に反映する
+        // 今回の行動結果を表示する
         transform.localPosition = new Vector3(
             -Constants.Width / 2
                 + positionX * Constants.Width / Constants.Division,
             actionRunner.currentDisplacement,
             0);
 
-        // 敵の位置に届いた波を読み取り、消費する
-        float wavePower =
-            lineSample.playerMedium.wavePowers[positionX];
-
-        lineSample.playerMedium.DestroyOneDivision(positionX);
-
-        // ダメージ計算を任せ、結果を表示する
+        // 渡された波の値を使ってダメージを計算する
         health.ApplyWave(wavePower);
         HPBar.fillAmount = health.HpRatio;
 
@@ -93,14 +81,4 @@ public class EnemyController : MonoBehaviour
         return actionRunner.Step();
     }
 
-
-    private void OnDestroy()
-    {
-        if (lineSample != null)
-        {
-            lineSample.WaveMoved -= OnWaveMoved;
-            lineSample.UnregisterEnemy(this);
-        }
-
-    }
 }
